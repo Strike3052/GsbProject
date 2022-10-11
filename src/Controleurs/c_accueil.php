@@ -17,6 +17,7 @@
 
 if ($estConnecte) {
     include_once PATH_VIEWS . 'v_entete.php';
+    $test = $estComptable;
 } else {
     include PATH_VIEWS . 'v_connexion.php';
 }

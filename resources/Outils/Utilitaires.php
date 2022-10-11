@@ -28,6 +28,21 @@ abstract class Utilitaires
     {
         return isset($_SESSION['idVisiteur']);
     }
+    
+    /**
+     * Teste si un quelconque visiteur est comptable
+     *
+     * @return vrai ou faux
+     */
+    public static function estComptable(): bool
+    {
+        if (isset($_SESSION['role']))
+        {
+            return $_SESSION['role']=="comptable";
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Enregistre dans une variable session les infos d'un visiteur
@@ -38,11 +53,12 @@ abstract class Utilitaires
      *
      * @return null
      */
-    public static function connecter($idVisiteur, $nom, $prenom): void
+    public static function connecter($idVisiteur, $nom, $prenom, $role): void
     {
         $_SESSION['idVisiteur'] = $idVisiteur;
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
+        $_SESSION['role'] = $role;
     }
 
     /**
