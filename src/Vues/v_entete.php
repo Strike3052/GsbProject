@@ -79,10 +79,6 @@ if ($estConnecte && !$estComptable) {
                     .nav.nav-pills.pull-right > li > a {
                         color:orange;
                     }
-                    .nav.nav-pills.pull-right > li > a:hover {
-                        background-color:orange;
-                        color: white;
-                    }
                     .nav.nav-pills.pull-right > li.active, .nav.nav-pills.pull-right > li.active > a, .nav-pills > li.active > a > span, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
                         background-color:orange;
                         color:white;
