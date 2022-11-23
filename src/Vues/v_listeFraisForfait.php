@@ -42,6 +42,16 @@
                     <?php
                 }
                 ?>
+                <div class="form-group">
+                    <label for="typeVehicule">Quel est votre type de vehicule : </label>
+                    <select name="typeVehicule['typeCarburant']" id="typeVehicule" required>
+                        <option value="">--Selectionnez un type de véhicule--</option>
+                        <option value="ESSENCE">Essence</option>
+                        <option value="DIESEL">Diesel</option>
+                    </select>
+                    <label for="NombreChevaux">Le nombre de chevaux de votre véhicule : </label>
+                    <input type="number" id="NombreChevaux" name="typeVehicule['nbChevaux']" min="1" max="10" required>
+                </div>
                 <button class="btn btn-success" type="submit">Ajouter</button>
                 <button class="btn btn-danger" type="reset">Effacer</button>
             </fieldset>

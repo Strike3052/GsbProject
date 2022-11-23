@@ -30,8 +30,10 @@ switch ($action) {
         break;
     case 'validerMajFraisForfait':
         $lesFrais = filter_input(INPUT_POST, 'lesFrais', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+        $typeVehicule = filter_input(INPUT_POST, 'typeVehicule', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
         if (Utilitaires::lesQteFraisValides($lesFrais)) {
             $pdo->majFraisForfait($idVisiteur, $mois, $lesFrais);
+            $pdo->majFraisKilometrique($idVisiteur, $mois, $typeVehicule);
         } else {
             Utilitaires::ajouterErreur('Les valeurs des frais doivent être numériques');
             include PATH_VIEWS . 'v_erreurs.php';

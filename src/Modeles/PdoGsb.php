@@ -252,7 +252,63 @@ class PdoGsb
             $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
             $requetePrepare->bindParam(':idFrais', $unIdFrais, PDO::PARAM_STR);
             $requetePrepare->execute();
+        }       
+    }
+    
+    
+    
+    /**
+     * Met à jour la ligne pour spécifier le type de véhicule utilisé lors de la 1er majFraisForfait
+     * @param string $idVisiteur
+     * @param string $mois
+     * @param array $typeVehicule
+     */
+    public function majFraisKilometrique(string $idVisiteur, string $mois,array $typeVehicule){
+        $idFraisKilo = $this->getIdTypeVehicule($typeVehicule);
+        $requete = $this->connexion->prepare(
+                'update ligneforfaitkilometrique'
+                . ' set idfraiskilometrique = :idFraisKilo'
+                . ' where idVisiteur = :idVisiteur'
+                . ' and mois = :mois'
+        );
+        $requete->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR_CHAR);
+        $requete->bindParam(':mois', $mois, PDO::PARAM_STR_CHAR);
+        $requete->bindParam(':idFraisKilo', $idFraisKilo, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+    }
+    
+    /**
+     * Retourne l'id exacte d'un type de vehicule de part son nombre de chevaux et son type de Carburant
+     * @param array $typeVehicule
+     * @return string
+     */
+    public function getIdTypeVehicule(array $typeVehicule){
+        $lesCles = array_keys($typeVehicule);
+        $test1 = $typeVehicule[$lesCles[0]];
+        $test2 = $typeVehicule[$lesCles[1]];
+        $test3 = $typeVehicule["typeCarburant"];
+        $test4 = $typeVehicule['typeCarburant'];
+        if ($typeVehicule[1]< 5){
+        $id = $typeVehicule[0].'4M';
+        }else{
+            $id = $typeVehicule[0][0-2].'5P';
         }
+        return $id;
+    }
+    
+    /**
+     * Retourne le prix du forfait kilometrique d'un type de vehicule
+     * @param array $typeVehicule
+     * @return decimal
+     */
+    public function getPrixKilometrique(array $typeVehicule){
+        $id = $this->getIdTypeVehicule($typeVehicule);        
+        $requete = $this->connexion->prepare(
+          'Select montant from fraiskilometrique where id=:Id'      
+        );
+        $requete->bindParam(':id', $id, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+        return $requete->fetch();
     }
 
     /**
@@ -349,6 +405,7 @@ class PdoGsb
         if ($laDerniereFiche['idEtat'] == 'CR') {
             $this->majEtatFicheFrais($idVisiteur, $dernierMois, 'CL');
         }
+        // Ajout de la fiche de frais avec toutes les valeurs mise à 0
         $requetePrepare = $this->connexion->prepare(
             'INSERT INTO fichefrais (idvisiteur,mois,nbjustificatifs,'
             . 'montantvalide,datemodif,idetat) '
@@ -359,6 +416,7 @@ class PdoGsb
         $requetePrepare->execute();
         $lesIdFrais = $this->getLesIdFrais();
         foreach ($lesIdFrais as $unIdFrais) {
+            // ajout d'une ligne mise à 0 pour chaque frais de la table fraisforfait
             $requetePrepare = $this->connexion->prepare(
                 'INSERT INTO lignefraisforfait (idvisiteur,mois,'
                 . 'idfraisforfait,quantite) '
@@ -369,6 +427,14 @@ class PdoGsb
             $requetePrepare->bindParam(':idFrais', $unIdFrais['idfrais'], PDO::PARAM_STR);
             $requetePrepare->execute();
         }
+        // Ajout d'une ligne avec aucun fraiskilometrique spécifier
+        $requete = $this->connexion->prepare(
+          'insert into ligneforfaitkilometrique (idVisiteur,mois,idfraiskilometrique) values'
+                . ' (:idVisiteur, :mois, null)'      
+        );
+        $requete->bindParam(':idVisiteur', $idVisiteur, PDO::PARAM_STR_CHAR);
+        $requete->bindParam(':mois', $mois, PDO::PARAM_STR_CHAR);
+        $requete->execute();
     }
 
     /**
