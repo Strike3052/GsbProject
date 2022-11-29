@@ -284,14 +284,10 @@ class PdoGsb
      */
     public function getIdTypeVehicule(array $typeVehicule){
         $lesCles = array_keys($typeVehicule);
-        $test1 = $typeVehicule[$lesCles[0]];
-        $test2 = $typeVehicule[$lesCles[1]];
-        $test3 = $typeVehicule["typeCarburant"];
-        $test4 = $typeVehicule['typeCarburant'];
-        if ($typeVehicule[1]< 5){
-        $id = $typeVehicule[0].'4M';
+        if ($typeVehicule[$lesCles[1]] < 5){
+        $id = substr($typeVehicule[$lesCles[0]], 0 , 3).'4M';
         }else{
-            $id = $typeVehicule[0][0-2].'5P';
+            $id = substr($typeVehicule[$lesCles[0]], 0 , 3) .'5P';
         }
         return $id;
     }
