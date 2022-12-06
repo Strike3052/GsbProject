@@ -40,13 +40,15 @@ switch ($action) {
         $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idDuVisiteur, $leMois);
         $numAnnee = substr($leMois, 0, 4);
         $numMois = substr($leMois, 4, 2);
-        $libEtat = $lesInfosFicheFrais['libEtat'];
-        $montantValide = $lesInfosFicheFrais['montantValide'];
-        $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
-        $dateModif = Utilitaires::dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
-        include PATH_VIEWS . 'v_correction.php';
-        //include PATH_VIEWS . 'v_etatFrais.php';
+        if ($lesInfosFicheFrais) {
+            $libEtat = $lesInfosFicheFrais['libEtat'];
+            $montantValide = $lesInfosFicheFrais['montantValide'];
+            $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
         
+            $dateModif = Utilitaires::dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
+            include PATH_VIEWS . 'v_correction.php';
+            //include PATH_VIEWS . 'v_etatFrais.php';
+        }
         }
         break;
     case 'majFraisHorsForfait':
@@ -71,7 +73,7 @@ switch ($action) {
         //include PATH_VIEWS . 'v_etatFrais.php';
         
         $idFraisCorrec = filter_input(INPUT_POST, 'idFrais', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $moisCorrec = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $moisCorrec = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_NUMBER_INT);
         $libelleCorrec = filter_input(INPUT_POST, 'libelle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $montantCorrec = filter_input(INPUT_POST, 'montant', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
