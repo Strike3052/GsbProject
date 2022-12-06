@@ -108,8 +108,8 @@ if ($estConnecte && !$estComptable) {
                                         Valider les fiches de frais
                                     </a>
                                 </li>
-                                <li <?php if ($uc == 'qzd') { ?>class="active"<?php } ?>>
-                                    <a href="">
+                                <li <?php if ($uc == 'etatFrais') { ?>class="active"<?php } ?>>
+                                    <a href="index.php?uc=etatFrais&action=suiviPaiment">
                                         <span class="glyphicon glyphicon-euro"></span>
                                         Suivre le paiement des fiches de frais
                                     </a>

@@ -14,7 +14,6 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
 use Outils\Utilitaires;
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -44,4 +43,11 @@ switch ($action) {
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
         $dateModif = Utilitaires::dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
         include PATH_VIEWS . 'v_etatFrais.php';
+    case 'suiviPaiment':
+        // Test de vérification que seulement un comptable est accès à cette page
+        if (!$estComptable) {
+            include_once('v_erreurs.php');
+        } else {
+            include_once PATH_VIEWS . 'v_suiviPaiementFrais.php';
+        }
 }
