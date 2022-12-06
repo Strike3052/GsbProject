@@ -1,10 +1,11 @@
 -- Script de restauration de l'application "GSB Frais"
-
+drop database if exists gsb_frais;
+drop user if exists 'userGsb'@'localhost';
 -- Administration de la base de données
 CREATE DATABASE gsb_frais ;
-CREATE USER 'userGsb@localhost' IDENTIFIED BY 'secret';
-GRANT SHOW DATABASES ON *.* TO userGsb@localhost;
-GRANT ALL PRIVILEGES ON `gsb_frais`.* TO userGsb@localhost;
+CREATE USER 'userGsb'@'localhost' IDENTIFIED BY 'secret';
+GRANT SHOW DATABASES ON *.* TO 'userGsb'@'localhost';
+GRANT ALL PRIVILEGES ON `gsb_frais`.* TO 'userGsb'@'localhost';
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 USE gsb_frais ;
 
