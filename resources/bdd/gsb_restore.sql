@@ -123,3 +123,61 @@ INSERT INTO visiteur (id, nom, prenom, login, mdp, adresse, cp, ville, dateembau
 ('f21', 'Finck', 'Jacques', 'jfinck', 'mpb3t', '10 avenue du Prado', '13002', 'Marseille', '2001-11-10'),
 ('f39', 'Frémont', 'Fernande', 'ffremont', 'xs5tq', '4 route de la mer', '13012', 'Allauh', '1998-10-01'),
 ('f4', 'Gest', 'Alain', 'agest', 'dywvt', '30 avenue de la mer', '13025', 'Berre', '1985-11-01');
+
+-----------------------------------------
+-- Ajout des prix kilometrik détaillés --
+-----------------------------------------
+-- on drop, on sait jamais
+drop table if exists fraiskilometrique;
+-- Ajout table des frais kilométrique détaillés
+create table fraiskilometrique (
+	id char(5) not null,
+    typeVehicule varchar(12) not null,
+    libelle varchar(30) not null,
+    montant decimal(5,2) not null,
+    constraint PK_fraiskilometrique primary key(id)
+);
+-- Ajout des frais détaillés
+insert into fraiskilometrique (id,typeVehicule,libelle, montant) values ('ESS4M','ESSENCE','Vehicule essence 4CV', 0.62);
+insert into fraiskilometrique (id,typeVehicule,libelle, montant) values ('ESS5P','ESSENCE','Vehicule essence 5CV ou plus', 0.67);
+insert into fraiskilometrique (id,typeVehicule,libelle, montant) values ('DIE4M','DIESEL','Vehicule diesel 4CV', 0.52);
+insert into fraiskilometrique (id,typeVehicule,libelle, montant) values ('DIE5P','DIESEL','Vehicule diesel 5CV', 0.58);
+
+-- Peut être ignoré
+-- Mais on le fait pour détecter des problèmes futurs vu qu'on en a plus besin techniquement
+update fraisforfait set montant=null where id='KM';
+
+-- On drop, on sait jamais
+drop table if exists ligneForfaitKilometrique;
+-- Ajout table de jointure pour ne pas toucher l'ensemble de la BDD fonctionnel
+create table ligneForfaitKilometrique(
+    idVisiteur char(4) not null,
+    mois char(6) not null,
+    idFraisKilometrique char(5) null,
+    constraint PK_ligneForfaitKilo primary key (idVisiteur,mois),
+    constraint FK_LigneKilo_Visiteur foreign key (idVisiteur) references visiteur(id)
+);
+
+------------------------------
+-- Création table comptable --
+------------------------------
+
+CREATE TABLE IF NOT EXISTS comptable (
+  id char(4) NOT NULL,
+  nom char(30) DEFAULT NULL,
+  prenom char(30)  DEFAULT NULL, 
+  login char(20) DEFAULT NULL,
+  mdp char(20) DEFAULT NULL,
+  adresse char(30) DEFAULT NULL,
+  cp char(5) DEFAULT NULL,
+  ville char(30) DEFAULT NULL,
+  dateembauche date DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+------------------------------------
+-- Modification des mots de passe --
+------------------------------------
+ALTER TABLE `visiteur` CHANGE `mdp` `mdp` CHAR(255);
+
+ALTER TABLE `comptable` CHANGE `mdp` `mdp` CHAR(255);
