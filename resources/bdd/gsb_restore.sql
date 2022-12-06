@@ -176,6 +176,8 @@ CREATE TABLE IF NOT EXISTS comptable (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
+INSERT INTO comptable (id, nom, prenom, login, mdp, adresse, cp, ville, dateembauche) VALUES
+('a198', 'Pignon', 'Aymé', 'ayme', 'P@ssw0rd', '8 rue des Charmant prince', '83220', 'Le Pradet', '2012-12-21'),
 ------------------------------------
 -- Modification des mots de passe --
 ------------------------------------
