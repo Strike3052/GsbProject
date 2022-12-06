@@ -105,10 +105,10 @@ class PdoGsb
     }
     
      /**
-     * Retourne les informations d'un visiteur
+     * Retourne les informations d'un comptable
      *
-     * @param String $login Login du visiteur
-     * @param String $mdp   Mot de passe du visiteur
+     * @param String $login Login du comptable
+     * @param String $mdp   Mot de passe du comptable
      *
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
      */
@@ -253,6 +253,33 @@ class PdoGsb
             $requetePrepare->bindParam(':idFrais', $unIdFrais, PDO::PARAM_STR);
             $requetePrepare->execute();
         }
+    }
+    
+     /**
+     * Met à jour la table ligneFraisHorsForfait
+     * Met à jour la table ligneFraisHorsForfait pour un frais hors forfait et
+     * un mois donné en enregistrant les nouveaux paramètres
+     *
+     * @param String $idVisiteur ID du visiteur
+     * @param String $mois       Mois sous la forme aaaamm
+     * @param Array  $lesFrais   tableau associatif de clé idFrais et
+     *                           de valeur la quantité pour ce frais
+     *
+     * @return null
+     */
+    public function majFraisHorsForfait($idFrais, $mois, $libelle, $montant): void
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'UPDATE lignefraishorsforfait '
+           # . 'SET lignefraishorsforfait.mois = :mois, '
+            . 'SET lignefraishorsforfait.libelle = :libelle, lignefraishorsforfait.montant = :montant '
+            . 'WHERE lignefraishorsforfait.id = :idFrais '
+        );
+        #$requetePrepare->bindParam(':mois', $mois, PDO::PARAM_INT);
+        $requetePrepare->bindParam(':libelle', $libelle, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':montant', $montant, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':idFrais', $idFrais, PDO::PARAM_STR);
+        $requetePrepare->execute();
     }
 
     /**
@@ -445,6 +472,37 @@ class PdoGsb
             );
         }
         return $lesMois;
+    }
+    
+    /**
+     * Retourne les informations d'une fiche de frais d'un visiteur pour un
+     * mois donné
+     *
+     * @param String $idVisiteur ID du visiteur
+     * @param String $mois       Mois sous la forme aaaamm
+     *
+     * @return un tableau avec des champs de jointure entre une fiche de frais
+     *         et la ligne d'état
+     */
+    public function getLesVisiteurs(): array
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT id, nom, prenom FROM visiteur;'
+        );
+        $requetePrepare->execute();
+        
+        return $requetePrepare->fetchAll();
+    }
+    
+    public function getLesMois($idVisiteur): array
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT idvisiteur, mois FROM fichefrais where idvisiteur = :unIdVisiteur;'
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        
+        return $requetePrepare->fetchAll();
     }
 
     /**

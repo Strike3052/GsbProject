@@ -102,15 +102,15 @@ if ($estConnecte && !$estComptable) {
                                         Accueil
                                     </a>
                                 </li>
-                                <li <?php if ($uc == 'zqd') { ?>class="active"<?php } ?>>
-                                    <a href="">
+                                <li <?php if ($uc == 'valideFrais') { ?>class="active"<?php } ?>>
+                                    <a href="index.php?uc=valideFrais&action=selectionnerVisiteur">
                                         <span class="glyphicon glyphicon-ok"></span>
                                         Valider les fiches de frais
                                     </a>
                                 </li>
                                 <li <?php if ($uc == 'qzd') { ?>class="active"<?php } ?>>
                                     <a href="">
-                                        <span class="glyphicon glyphicon-euro"></span>
+                                        <span class="glyphicon glyphicon-list-alt"></span>
                                         Suivre le paiement des fiches de frais
                                     </a>
                                 </li>

@@ -6755,3 +6755,26 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+.panel-info-comptable {
+  border-color: orange;
+}
+.panel-info-comptable > .panel-heading {
+  color: #31708f;
+  background-color: orange;
+  border-color: orange;
+}
+.panel-info-comptable > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: orange;
+}
+.panel-info-comptable > .panel-heading .badge {
+  color: #d9edf7;
+  background-color: orange;
+}
+.panel-info-comptable > .panel-footer + .panel-collapse > .panel-body {
+  border-bottom-color: orange;
+}
+
+.table-bordered-comptable > thead > tr > th, .table-bordered-comptable > tbody > tr > th, .table-bordered-comptable > tfoot > tr > th, .table-bordered-comptable > thead > tr > td, .table-bordered-comptable > tbody > tr > td, .table-bordered-comptable > tfoot > tr > td {
+    border: 1px solid orange;
+}
