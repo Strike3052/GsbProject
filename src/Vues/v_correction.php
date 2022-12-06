@@ -59,7 +59,12 @@
         <?php
         foreach ($lesFraisHorsForfait as $unFraisHorsForfait) {
             $date = implode('-', array_reverse(explode('/',$unFraisHorsForfait['date'])));
-            $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
+            
+            if (isset($libelleCorrec) && $unFraisHorsForfait['id'] == $idFraisCorrec && $unFraisHorsForfait['libelle'] != $libelleCorrec) {
+                $libelle = $libelleCorrec;
+            } else {
+                $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
+            }
             if (isset($idFraisCorrec) && $unFraisHorsForfait['id'] == $idFraisCorrec && $unFraisHorsForfait['montant'] != $montantCorrec) {
                 $montant = $montantCorrec;
             } else {

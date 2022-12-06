@@ -342,11 +342,11 @@ class PdoGsb
     {
         $requetePrepare = $this->connexion->prepare(
             'UPDATE lignefraishorsforfait '
-           # . 'SET lignefraishorsforfait.mois = :mois, '
-            . 'SET lignefraishorsforfait.libelle = :libelle, lignefraishorsforfait.montant = :montant '
+            . 'SET lignefraishorsforfait.date = :mois, '
+            . 'lignefraishorsforfait.libelle = :libelle, lignefraishorsforfait.montant = :montant '
             . 'WHERE lignefraishorsforfait.id = :idFrais '
         );
-        #$requetePrepare->bindParam(':mois', $mois, PDO::PARAM_INT);
+        $requetePrepare->bindParam(':mois', $mois, PDO::PARAM_STR);
         $requetePrepare->bindParam(':libelle', $libelle, PDO::PARAM_STR);
         $requetePrepare->bindParam(':montant', $montant, PDO::PARAM_STR);
         $requetePrepare->bindParam(':idFrais', $idFrais, PDO::PARAM_STR);
@@ -596,7 +596,7 @@ class PdoGsb
      * @return un tableau avec des champs de jointure entre une fiche de frais
      *         et la ligne d'état
      */
-    public function getLesInfosFicheFrais($idVisiteur, $mois): array
+    public function getLesInfosFicheFrais($idVisiteur, $mois): array|bool
     {
         $requetePrepare = $this->connexion->prepare(
             'SELECT fichefrais.idetat as idEtat, '
