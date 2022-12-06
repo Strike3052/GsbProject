@@ -281,6 +281,31 @@ function updateMdpVisiteur($pdo)
     }
 }
 
+function updateMdpVisiteurHash($pdo)
+{
+    $req = 'select * from visiteur';
+    $res = $pdo->query($req);
+    $lesLignes = $res->fetchAll();
+    foreach ($lesLignes as $unVisiteur) {
+        $hashMdp = password_hash($unVisiteur['mdp'], PASSWORD_DEFAULT);
+        $id = $unVisiteur['id'];
+        $req = "update visiteur set mdp = '$hashMdp' where visiteur.id = '$id' ";
+        $pdo->exec($req);
+    }
+}
+
+function updateMdpComptableHash($pdo)
+{
+    $req = 'select * from comptable';
+    $res = $pdo->query($req);
+    $lesLignes = $res->fetchAll();
+    foreach ($lesLignes as $unComptable) {
+        $hashMdp = password_hash($unComptable['mdp'], PASSWORD_DEFAULT);
+        $id = $unComptable['id'];
+        $req = "update comptable set mdp = '$hashMdp' where comptable.id = '$id' ";
+        $pdo->exec($req);
+    }
+}
 /**
  * Fonction qui crée des lignes de frais hors forfait (via des INSERT SQL)
  *
