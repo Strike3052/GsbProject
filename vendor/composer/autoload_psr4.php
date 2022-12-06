@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Spipu\\Html2Pdf\\' => array($vendorDir . '/spipu/html2pdf/src'),
     'Sources\\' => array($baseDir . '/tests'),
     'Outils\\' => array($baseDir . '/resources/Outils'),
     'Modeles\\' => array($baseDir . '/src/Modeles'),

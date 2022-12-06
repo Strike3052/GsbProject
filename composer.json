@@ -29,5 +29,8 @@
         "psr-4": {
             "Sources\\": "tests"
         }
+    },
+    "require": {
+        "spipu/html2pdf": "^5.2"
     }
 }
