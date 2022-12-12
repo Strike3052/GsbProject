@@ -125,10 +125,10 @@ INSERT INTO visiteur (id, nom, prenom, login, mdp, adresse, cp, ville, dateembau
 ('f39', 'Frémont', 'Fernande', 'ffremont', 'xs5tq', '4 route de la mer', '13012', 'Allauh', '1998-10-01'),
 ('f4', 'Gest', 'Alain', 'agest', 'dywvt', '30 avenue de la mer', '13025', 'Berre', '1985-11-01');
 
------------------------------------------
--- Ajout des prix kilometrik détaillés --
------------------------------------------
--- on drop, on sait jamais
+/*
+* Ajout des prix kilometrik détaillés
+*/
+/* on drop, on sait jamais */
 drop table if exists fraiskilometrique;
 -- Ajout table des frais kilométrique détaillés
 create table fraiskilometrique (
@@ -159,9 +159,9 @@ create table ligneForfaitKilometrique(
     constraint FK_LigneKilo_Visiteur foreign key (idVisiteur) references visiteur(id)
 );
 
-------------------------------
--- Création table comptable --
-------------------------------
+/*
+* Création table comptable
+*/
 
 CREATE TABLE IF NOT EXISTS comptable (
   id char(4) NOT NULL,
@@ -178,9 +178,9 @@ CREATE TABLE IF NOT EXISTS comptable (
 
 INSERT INTO comptable (id, nom, prenom, login, mdp, adresse, cp, ville, dateembauche) VALUES
 ('a198', 'Pignon', 'Aymé', 'ayme', 'P@ssw0rd', '8 rue des Charmant prince', '83220', 'Le Pradet', '2012-12-21');
-------------------------------------
--- Modification des mots de passe --
-------------------------------------
+/*
+* Modification des mots de passe
+*/
 ALTER TABLE `visiteur` CHANGE `mdp` `mdp` CHAR(255);
 
 ALTER TABLE `comptable` CHANGE `mdp` `mdp` CHAR(255);
