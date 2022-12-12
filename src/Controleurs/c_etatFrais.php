@@ -50,16 +50,35 @@ switch ($action) {
             break;
         }
         // Selection d'un visiteur
-        if(filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS)){
+        if (filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
             $idDuVisiteur = filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $lesMois = $pdo->getLesMois($idDuVisiteur);
             $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         }
         $lesVisiteurs = $pdo->getLesVisiteurs();
-        
+
         $ucEtAction = "uc=etatFrais&action=suiviPaiment";
-        include_once PATH_VIEWS . 'v_suiviPaiementFrais.php';
-        
-        // Affichage du contenu
-        
+        include_once PATH_VIEWS . 'v_listeVisiteurs.php';
+
+        // Selection du mois fait ?
+        if (isset($leMois)) {
+            // variable et contenu
+            $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
+            $lesFraisForfait = $pdo->getLesFraisForfait($idDuVisiteur, $leMois);
+            
+            foreach ($lesFraisForfait as $unFrais){
+                if($unFrais['idfrais']=='KM'){
+                    $quantite = $unFrais['quantite'];
+                    $prixUni = $pdo->getPrixUniKilometrique($idDuVisiteur, $leMois);
+                    $Total = $quantite * $prixUni[0];
+                    
+                }else{
+                    $Total = $unFrais['quantite'] * $unFrais['prixuni'];
+                }
+                $TotalFraisForfait[$unFrais['idfrais']] = $Total;
+            }
+            
+            // Affichage du contenu
+            include_once PATH_VIEWS . 'v_suiviPaiementFrais.php';
+        }
 }
