@@ -77,12 +77,14 @@ switch ($action) {
         $libelleCorrec = filter_input(INPUT_POST, 'libelle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $montantCorrec = filter_input(INPUT_POST, 'montant', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
-        include PATH_VIEWS . 'v_correction.php';
+        $lesFraisList = filter_input(INPUT_POST, 'lesFrais', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+        
+         include PATH_VIEWS . 'v_correction.php';
         
         echo $idFraisCorrec . $moisCorrec . $libelleCorrec . $montantCorrec;
         
         $pdo->majFraisHorsForfait($idFraisCorrec, $moisCorrec, $libelleCorrec, $montantCorrec);
-        
+        $pdo->majFraisForfait($idDuVisiteur, $leMois, $lesFraisList);
         }
         break;
 
