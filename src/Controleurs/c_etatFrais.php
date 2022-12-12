@@ -47,7 +47,19 @@ switch ($action) {
         // Test de vérification que seulement un comptable est accès à cette page
         if (!$estComptable) {
             include_once('v_erreurs.php');
-        } else {
-            include_once PATH_VIEWS . 'v_suiviPaiementFrais.php';
+            break;
         }
+        // Selection d'un visiteur
+        if(filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS)){
+            $idDuVisiteur = filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $lesMois = $pdo->getLesMois($idDuVisiteur);
+            $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        }
+        $lesVisiteurs = $pdo->getLesVisiteurs();
+        
+        $ucEtAction = "uc=etatFrais&action=suiviPaiment";
+        include_once PATH_VIEWS . 'v_suiviPaiementFrais.php';
+        
+        // Affichage du contenu
+        
 }

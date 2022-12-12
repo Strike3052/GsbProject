@@ -25,11 +25,11 @@
          <?php
          if(isset($idDuVisiteur)) {
              ?>
-            <form action="index.php?uc=valideFrais&action=selectionnerMois" method="post" role="form">
+            <form action="index.php?<?php echo $ucEtAction; ?>" method="post" role="form">
             <?php
          } else {
              ?>
-             <form action="index.php?uc=valideFrais&action=selectionnerMois" method="post" role="form">
+             <form action="index.php?<?php echo $ucEtAction; ?>" method="post" role="form">
              <?php
          }
          ?>
