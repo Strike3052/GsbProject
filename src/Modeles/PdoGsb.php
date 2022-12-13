@@ -353,6 +353,34 @@ class PdoGsb
         $requetePrepare->execute();
     }
     
+    /**
+     * Met à jour la table ligneFraisHorsForfait
+     * Met à jour la table ligneFraisHorsForfait pour un frais hors forfait et
+     * un mois donné en reportant d'un mois le fraisHorsForfait
+     *
+     * @param String $idVisiteur ID du visiteur
+     * @param String $mois       Mois sous la forme aaaamm
+     * @param Array  $lesFrais   tableau associatif de clé idFrais et
+     *                           de valeur la quantité pour ce frais
+     *
+     * @return null
+     */
+    public function majFraisHorsForfaitReport($idFrais, $date,$mois, $libelle, $montant): void
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'UPDATE lignefraishorsforfait '
+            . 'SET lignefraishorsforfait.date = :date, '
+            . 'lignefraishorsforfait.libelle = :libelle, lignefraishorsforfait.montant = :montant, lignefraishorsforfait.mois=:mois '
+            . 'WHERE lignefraishorsforfait.id = :idFrais '
+        );
+        $requetePrepare->bindParam(':date', $date, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':mois', $mois, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':libelle', $libelle, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':montant', $montant, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':idFrais', $idFrais, PDO::PARAM_STR);
+        $requetePrepare->execute();
+    }
+    
  
 
     /**

@@ -146,10 +146,14 @@ switch ($action) {
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
         
         $idFraisCorrec = filter_input(INPUT_GET, 'idFrais', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $moisCorrec = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_NUMBER_INT);
+        $moisCorrec = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_STRING);
         $libelleCorrec = filter_input(INPUT_GET, 'libelle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $montantCorrec = filter_input(INPUT_GET, 'montant', FILTER_DEFAULT);
       
+        $newDate = date('Y-m-d',strtotime("+1 month", strtotime($moisCorrec)));
+        $date2 = date('Y',$libelleCorrec);
+        
+        $pdo->majFraisHorsForfaitReport($idFraisCorrec, $newDate,  date('Y',$libelleCorrec), $montantCorrec);
         
         $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
         include PATH_VIEWS . 'v_correction.php';

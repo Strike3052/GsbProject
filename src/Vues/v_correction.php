@@ -81,7 +81,7 @@
                 <td>
                     <button class="btn btn-success" type="submit">Corriger</button>
                     <a href="index.php?uc=valideFrais&action=majRefuse&idFrais=<?php echo $idFrais ?>&date=<?php echo $date ?>&libelle=<?php echo $libelle ?>&montant=<?php echo $montant ?>" type="reset" role="button" value="Refusé" class="btn btn-danger">Refusé</a>
-                    <a href="index.php?uc=valideFrais&action=majReport&idFrais=<?php echo $idFrais ?>&date=<?php document.getElementById('date') ?>&libelle=<?php echo $libelle ?>&montant=<?php echo $montant ?>" type="reset" role="button" value="Reporté" class="btn btn-danger">Reporté</a>
+                    <a href="index.php?uc=valideFrais&action=majReport&idFrais=<?php echo $idFrais ?>&date=<?php echo $date ?>&libelle=<?php echo $libelle ?>&montant=<?php echo $montant ?>" type="reset" role="button" value="Reporté" class="btn btn-danger">Reporté</a>
                 
                 </td>
             </tr>
