@@ -24,7 +24,7 @@ $pdo->query('SET CHARACTER SET utf8');
 set_time_limit(0);
 
 updateMdpComptableHash($pdo);
-updateMdpVisiteurHash($pdo);
+//updateMdpVisiteurHash($pdo);
 //creationFichesFrais($pdo);
 //creationFraisForfait($pdo);
 //creationFraisHorsForfait($pdo);

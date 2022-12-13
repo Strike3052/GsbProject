@@ -60,16 +60,12 @@
         foreach ($lesFraisHorsForfait as $unFraisHorsForfait) {
             $date = implode('-', array_reverse(explode('/',$unFraisHorsForfait['date'])));
             
-            if (isset($libelleCorrec) && $unFraisHorsForfait['id'] == $idFraisCorrec && $unFraisHorsForfait['libelle'] != $libelleCorrec) {
-                $libelle = $libelleCorrec;
-            } else {
-                $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
-            }
-            if (isset($idFraisCorrec) && $unFraisHorsForfait['id'] == $idFraisCorrec && $unFraisHorsForfait['montant'] != $montantCorrec) {
-                $montant = $montantCorrec;
-            } else {
-                $montant = $unFraisHorsForfait['montant']; 
-            }
+
+            $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
+
+
+            $montant = $unFraisHorsForfait['montant']; 
+            
             $idFrais = $unFraisHorsForfait['id'];
             ?>
             
@@ -84,7 +80,9 @@
                 <td><input type="text" id="montant" name="montant" value="<?php echo $montant ?>"></input></td>
                 <td>
                     <button class="btn btn-success" type="submit">Corriger</button>
-                    <button class="btn btn-danger" type="reset">Réinitialiser</button>
+                    <a href="index.php?uc=valideFrais&action=majRefuse&idFrais=<?php echo $idFrais ?>&date=<?php echo $date ?>&libelle=<?php echo $libelle ?>&montant=<?php echo $montant ?>" type="reset" role="button" value="Refusé" class="btn btn-danger">Refusé</a>
+                    <a href="index.php?uc=valideFrais&action=majReport&idFrais=<?php echo $idFrais ?>&date=<?php document.getElementById('date') ?>&libelle=<?php echo $libelle ?>&montant=<?php echo $montant ?>" type="reset" role="button" value="Reporté" class="btn btn-danger">Reporté</a>
+                
                 </td>
             </tr>
             </fieldset>
@@ -93,4 +91,6 @@
         }
         ?>
     </table>
+    
 </div>
+

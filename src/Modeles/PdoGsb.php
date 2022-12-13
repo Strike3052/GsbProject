@@ -352,6 +352,8 @@ class PdoGsb
         $requetePrepare->bindParam(':idFrais', $idFrais, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
+    
+ 
 
     /**
      * Met à jour le nombre de justificatifs de la table ficheFrais

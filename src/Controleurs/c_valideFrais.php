@@ -17,6 +17,7 @@
 
 use Outils\Utilitaires;
 
+
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $idVisiteur = $_SESSION['idVisiteur'];
 switch ($action) {
@@ -52,6 +53,7 @@ switch ($action) {
         }
         break;
     case 'majFraisHorsForfait':
+        $idTest = filter_input(INPUT_GET, 'idTest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
          $lesVisiteurs = $pdo->getLesVisiteurs();
          $idDuVisiteur = $_SESSION['idDuVisiteur'];
          $lesMois = $pdo->getLesMois($idDuVisiteur);
@@ -79,13 +81,78 @@ switch ($action) {
         
         $lesFraisList = filter_input(INPUT_POST, 'lesFrais', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
         
-         include PATH_VIEWS . 'v_correction.php';
+         
         
         echo $idFraisCorrec . $moisCorrec . $libelleCorrec . $montantCorrec;
         
         $pdo->majFraisHorsForfait($idFraisCorrec, $moisCorrec, $libelleCorrec, $montantCorrec);
+        if (isset($lesFraisList)) {
         $pdo->majFraisForfait($idDuVisiteur, $leMois, $lesFraisList);
         }
+        
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
+        $lesFraisForfait = $pdo->getLesFraisForfait($idDuVisiteur, $leMois);
+        include PATH_VIEWS . 'v_correction.php';
+        ?>
+        
+        <?php
+        }
         break;
-
+    case 'majRefuse':
+        $idTest = filter_input(INPUT_GET, 'idTest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+         $lesVisiteurs = $pdo->getLesVisiteurs();
+         $idDuVisiteur = $_SESSION['idDuVisiteur'];
+         $lesMois = $pdo->getLesMois($idDuVisiteur);
+         $leMois = $_SESSION['leMois'];
+        include PATH_VIEWS . 'v_listeVisiteurs.php';
+        
+    
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
+        $lesFraisForfait = $pdo->getLesFraisForfait($idDuVisiteur, $leMois);
+        $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idDuVisiteur, $leMois);
+        $numAnnee = substr($leMois, 0, 4);
+        $numMois = substr($leMois, 4, 2);
+        $libEtat = $lesInfosFicheFrais['libEtat'];
+        $montantValide = $lesInfosFicheFrais['montantValide'];
+        $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
+        
+        $idFraisCorrec = filter_input(INPUT_GET, 'idFrais', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $moisCorrec = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_NUMBER_INT);
+        $libelleCorrec = filter_input(INPUT_GET, 'libelle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $montantCorrec = filter_input(INPUT_GET, 'montant', FILTER_DEFAULT);
+        
+        $pdo->majFraisHorsForfait($idFraisCorrec, $moisCorrec, "REFUSE ".$libelleCorrec, $montantCorrec);
+        
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
+        include PATH_VIEWS . 'v_correction.php';
+        
+        break;
+    case 'majReport':
+        $idTest = filter_input(INPUT_GET, 'idTest', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+         $lesVisiteurs = $pdo->getLesVisiteurs();
+         $idDuVisiteur = $_SESSION['idDuVisiteur'];
+         $lesMois = $pdo->getLesMois($idDuVisiteur);
+         $leMois = $_SESSION['leMois'];
+        include PATH_VIEWS . 'v_listeVisiteurs.php';
+        
+    
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
+        $lesFraisForfait = $pdo->getLesFraisForfait($idDuVisiteur, $leMois);
+        $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais($idDuVisiteur, $leMois);
+        $numAnnee = substr($leMois, 0, 4);
+        $numMois = substr($leMois, 4, 2);
+        $libEtat = $lesInfosFicheFrais['libEtat'];
+        $montantValide = $lesInfosFicheFrais['montantValide'];
+        $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
+        
+        $idFraisCorrec = filter_input(INPUT_GET, 'idFrais', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $moisCorrec = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_NUMBER_INT);
+        $libelleCorrec = filter_input(INPUT_GET, 'libelle', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $montantCorrec = filter_input(INPUT_GET, 'montant', FILTER_DEFAULT);
+      
+        
+        $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
+        include PATH_VIEWS . 'v_correction.php';
+        
+        break;
 }
