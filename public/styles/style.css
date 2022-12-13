@@ -1,3 +1,36 @@
 .header {
     margin-top: 10px;
 }
+table {
+    table-layout: fixed;
+    width: 50%;
+    border : solid 3px;
+    border-color: #ffa500;
+    background-color: #efefef;
+}
+tr, th{
+    border : solid 2px #ffa500;
+}
+
+th, td {
+    padding: 20px;
+}
+
+tbody, thead th{
+    text-align: center;
+}
+thead{
+    background-color: #ffa500;
+}
+thead th{
+    font-weight: bold;
+    font-size: 16px;
+}
+tbody{
+    font-size: 15px;
+}
+
+.titregras{
+    font-weight: bold;
+    font-size: 26px;
+}
