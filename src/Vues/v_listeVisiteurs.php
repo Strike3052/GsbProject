@@ -31,7 +31,7 @@
         <?php
         if (isset($idDuVisiteur)) {
             ?>
-            <form action="index.php?<?php echo $ucEtAction; ?>" method="post" role="form">
+            <form id="lstVisiteurs" action="index.php?<?php echo $ucEtAction; ?>" method="post" role="form">
                 <?php
             } else {
                 ?>

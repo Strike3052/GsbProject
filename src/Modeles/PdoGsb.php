@@ -662,4 +662,14 @@ class PdoGsb {
         return $requete->fetch(PDO::FETCH_NUM)[0];
     }
 
+    public function modifEtatFicheFrais($idVisiteur, $mois, $idEtat): void{
+        $requete = $this->connexion->prepare(
+                'Update fichefrais set idetat = :idetat '
+                . 'where idvisiteur = :idvisiteur and mois = :mois'
+        );
+        $requete->bindParam('idvisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requete->bindParam('mois', $mois, PDO::PARAM_STR);
+        $requete->bindParam('idetat', $idEtat, PDO::PARAM_STR);
+        $requete->execute();
+    }
 }

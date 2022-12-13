@@ -51,13 +51,18 @@ switch ($action) {
             include_once PATH_VIEWS . 'v_erreurs.php';
             break;
         }
-        // Selection d'un visiteur
+// Selection d'un visiteur
         if (filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
             $idDuVisiteur = filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $lesMois = $pdo->getMoisFicheFrais($idDuVisiteur);
             $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if (!inArrayArray($lesMois, $leMois)) {
                 $leMois = $lesMois[0]['mois'];
+            }
+            
+            if (filter_input(INPUT_POST, 'nextStep', FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
+                $idnextstep = filter_input(INPUT_POST, 'nextStep', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $pdo->modifEtatFicheFrais($idDuVisiteur, $leMois, $idnextstep);
             }
         }
         $lesVisiteurs = $pdo->getLesVisiteurs();

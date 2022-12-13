@@ -1,9 +1,7 @@
 <h3>Etat actuel de la demande</h3>
 <?php
-echo "<p>La fiche de frais sélectionnée est '" . $etatFicheFrais ."'</p>";
-
+echo "<p>La fiche de frais sélectionnée est <strong>'" . $etatFicheFrais . "'</strong></p>";
 ?>
-TO DO : Ajouter un bouton pour changer l'etat de la demande
 
 <div>
     <h3>Frais Forfaitisés</h3>
@@ -49,6 +47,24 @@ if (!empty($lesFraisHorsForfait)) {
         </table>
     </div>
     <?php
-}else{
+} else {
     echo "<h3>Aucun frais hors forfait signalé</h3>";
 }
+
+switch ($etatFicheFrais) {
+    case 'Fiche créée, saisie en cours':
+        $message = 'Valider et mettre en paiement';
+        $nextStep = 'VA';
+        break;
+    case 'Validée et mise en paiement' :
+        $message = 'Rembourser les frais';
+        $nextStep = 'RB';
+        break;
+}
+?>
+
+<button form="lstVisiteurs" class="btn btn-success" type="submit" name="nextStep" value="<?php echo $nextStep ?>">
+    <?php echo $message ?>
+</button>
+
+
