@@ -1,8 +1,9 @@
 <h3>Etat actuel de la demande</h3>
-TO DO : Mettre l'etat de la demande
+<?php
+echo "<p>La fiche de frais sélectionnée est '" . $etatFicheFrais ."'</p>";
+
+?>
 TO DO : Ajouter un bouton pour changer l'etat de la demande
-ATTENTION : si la demande est en remboursé, ne pas mettre le btn
-TO DO : les mois disponible dans la liste sont ceux en cours
 
 <div>
     <h3>Frais Forfaitisés</h3>
@@ -51,4 +52,3 @@ if (!empty($lesFraisHorsForfait)) {
 }else{
     echo "<h3>Aucun frais hors forfait signalé</h3>";
 }
-?>

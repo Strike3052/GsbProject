@@ -306,14 +306,18 @@ class PdoGsb {
      * @return decimal
      */
     public function getPrixUniKilometrique($idVisiteur, $mois) {
-        $idTypeVehicule = $this->getIdTypeVehicule($idVisiteur, $mois)[0];
-        $requete = $this->connexion->prepare(
+        $idTypeVehicule = $this->getIdTypeVehicule($idVisiteur, $mois);
+        if ($idTypeVehicule == null){
+        return ['montant' => 0.62];
+        }else{
+          $requete = $this->connexion->prepare(
                 'select montant from fraiskilometrique '
                 . 'where id = :id'
         );
-        $requete->bindParam('id', $idTypeVehicule, PDO::PARAM_STR);
+        $requete->bindParam('id', $idTypeVehicule['idFraisKilometrique'], PDO::PARAM_STR);
         $requete->execute();
-        return $requete->fetch(PDO::FETCH_NUM);
+        return $requete->fetch(PDO::FETCH_ASSOC);  
+        }  
     }
 
     /**
@@ -330,7 +334,7 @@ class PdoGsb {
         $requete->bindParam('idVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requete->bindParam('mois', $mois, PDO::PARAM_STR);
         $requete->execute();
-        return $requete->fetch(PDO::FETCH_NUM);
+        return $requete->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -633,6 +637,29 @@ class PdoGsb {
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
+    }
+    
+    public function getMoisFicheFrais($idVisiteur){
+        $requete = $this->connexion->prepare(
+                "Select mois from fichefrais "
+                . "where (idetat = 'CR' OR idetat = 'VA') "
+                . "and idvisiteur = :idVisiteur "
+        );
+        $requete->bindParam('idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getEtatFicheFrais($idVisiteur, $unmois){
+        $requete = $this->connexion->prepare(
+                'Select libelle from etat where id = '
+                . '(Select idetat from fichefrais '
+                . 'where idvisiteur = :idVisiteur and mois = :unmois)'
+        );
+        $requete->bindParam('idVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requete->bindParam('unmois', $unmois, PDO::PARAM_STR);
+        $requete->execute();
+        return $requete->fetch(PDO::FETCH_NUM)[0];
     }
 
 }

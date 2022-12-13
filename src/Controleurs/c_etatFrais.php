@@ -43,17 +43,22 @@ switch ($action) {
         $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
         $dateModif = Utilitaires::dateAnglaisVersFrancais($lesInfosFicheFrais['dateModif']);
         include PATH_VIEWS . 'v_etatFrais.php';
+        break;
     case 'suiviPaiment':
         // Test de vérification que seulement un comptable est accès à cette page
         if (!$estComptable) {
-            include_once('v_erreurs.php');
+            $_REQUEST['erreurs'] = ["La personne voulant accéder à cette page n'est pas un comptable"];
+            include_once PATH_VIEWS . 'v_erreurs.php';
             break;
         }
         // Selection d'un visiteur
         if (filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS)) {
             $idDuVisiteur = filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $lesMois = $pdo->getLesMois($idDuVisiteur);
+            $lesMois = $pdo->getMoisFicheFrais($idDuVisiteur);
             $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            if (!inArrayArray($lesMois, $leMois)) {
+                $leMois = $lesMois[0]['mois'];
+            }
         }
         $lesVisiteurs = $pdo->getLesVisiteurs();
 
@@ -65,20 +70,30 @@ switch ($action) {
             // variable et contenu
             $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
             $lesFraisForfait = $pdo->getLesFraisForfait($idDuVisiteur, $leMois);
-            
-            foreach ($lesFraisForfait as $unFrais){
-                if($unFrais['idfrais']=='KM'){
+            $etatFicheFrais = $pdo->getEtatFicheFrais($idDuVisiteur, $leMois);
+
+            foreach ($lesFraisForfait as $unFrais) {
+                if ($unFrais['idfrais'] == 'KM') {
                     $quantite = $unFrais['quantite'];
                     $prixUni = $pdo->getPrixUniKilometrique($idDuVisiteur, $leMois);
-                    $Total = $quantite * $prixUni[0];
-                    
-                }else{
+                    $Total = $quantite * $prixUni['montant'];
+                } else {
                     $Total = $unFrais['quantite'] * $unFrais['prixuni'];
                 }
                 $TotalFraisForfait[$unFrais['idfrais']] = $Total;
             }
-            
+
             // Affichage du contenu
             include_once PATH_VIEWS . 'v_suiviPaiementFrais.php';
+            break;
         }
+}
+
+function inArrayArray(array $array, $isIn) {
+    foreach ($array as $newarray) {
+        if (in_array($isIn, $newarray)) {
+            return true;
+        }
+    }
+    return false;
 }
