@@ -103,7 +103,7 @@ if ($estConnecte && !$estComptable) {
                                     </a>
                                 </li>
                                 <li <?php if ($uc == 'valideFrais') { ?>class="active"<?php } ?>>
-                                    <a href="index.php?uc=valideFrais&action=selectionnerVisiteur">
+                                    <a href="index.php?uc=valideFrais&action=selectionnerMois">
                                         <span class="glyphicon glyphicon-ok"></span>
                                         Valider les fiches de frais
                                     </a>
