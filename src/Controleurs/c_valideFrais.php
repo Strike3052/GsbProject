@@ -123,7 +123,7 @@ switch ($action) {
         $montantCorrec = filter_input(INPUT_GET, 'montant', FILTER_DEFAULT);
 
         $newLibelle = strlen("REFUSE " . $libelleCorrec) > 255 ? substr("REFUSE " . $libelleCorrec, 0, 254) : "REFUSE " . $libelleCorrec;
-        $pdo->majFraisHorsForfait($idFraisCorrec, $moisCorrec, $libelleCorrec, $montantCorrec);
+        $pdo->majFraisHorsForfait($idFraisCorrec, $moisCorrec, $newLibelle, $montantCorrec);
 
         $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
         include PATH_VIEWS . 'v_correction.php';
