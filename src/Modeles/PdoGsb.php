@@ -353,6 +353,7 @@ class PdoGsb
         $requetePrepare->execute();
     }
     
+    
     /**
      * Met à jour la table ligneFraisHorsForfait
      * Met à jour la table ligneFraisHorsForfait pour un frais hors forfait et

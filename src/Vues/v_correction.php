@@ -46,9 +46,12 @@
     </div>
 </div>
 
+<?php
+if (count($lesFraisHorsForfait) > 0)
+{
+?>
 <div class="panel panel-info-comptable">
-    <div class="panel-heading">Descriptif des éléments hors forfait - 
-        <?php echo $nbJustificatifs ?> justificatifs reçus</div>
+    <div class="panel-heading">Descriptif des éléments hors forfait </div>
     <table class="table table-bordered-comptable table-responsive">
         <tr>
             <th class="date">Date</th>
@@ -93,4 +96,12 @@
     </table>
     
 </div>
+<a href="index.php?uc=valideFrais&action=ValideFiche&idFrais=<?php echo $idFrais ?>&date=<?php echo $date ?>&libelle=<?php echo $libelle ?>&montant=<?php echo $montant ?>" type="reset" role="button" value="Reporté" class="btn btn-success">Valider</a>
+<?php
+} else {
+?>
 
+<h3><center>Pas de frais hors forfait pour ce visiteur ce mois</center></h3>
+
+
+<?php } ?>
