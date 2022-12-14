@@ -83,7 +83,6 @@ switch ($action) {
 
             $lesFraisList = filter_input(INPUT_POST, 'lesFrais', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
 
-            echo $idFraisCorrec . $moisCorrec . $libelleCorrec . $montantCorrec;
 
             $pdo->majFraisHorsForfait($idFraisCorrec, $moisCorrec, $libelleCorrec, $montantCorrec);
             if (isset($lesFraisList)) {
