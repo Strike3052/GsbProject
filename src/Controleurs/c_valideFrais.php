@@ -170,6 +170,7 @@ switch ($action) {
         $idDuVisiteur = $_SESSION['idDuVisiteur'];
         $lesMois = $pdo->getLesMois($idDuVisiteur);
         $leMois = $_SESSION['leMois'];
+        $ucEtAction = "uc=valideFrais&action=selectionnerMois";
         include PATH_VIEWS . 'v_listeVisiteurs.php';
 
         $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idDuVisiteur, $leMois);
