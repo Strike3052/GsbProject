@@ -23,12 +23,14 @@ $pdo->query('SET CHARACTER SET utf8');
 
 set_time_limit(0);
 
+
 creationFichesFrais($pdo);
 creationFraisForfait($pdo);
 creationFraisHorsForfait($pdo);
 majFicheFrais($pdo);
 updateMdpComptableHash($pdo);
 updateMdpVisiteurHash($pdo);
+
 echo '<br>' . getNbTable($pdo, 'fichefrais') . ' fiches de frais créées !';
 echo '<br>' . getNbTable($pdo, 'lignefraisforfait')
         . ' lignes de frais au forfait créées !';
