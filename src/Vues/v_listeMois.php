@@ -14,7 +14,9 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
+if(!isset($ucEtAction)){
+    $ucEtAction = 'index.php?uc=etatFrais&action=voirEtatFrais';
+}
 ?>
 <h2>Mes fiches de frais</h2>
 <div class="row">
@@ -22,7 +24,7 @@
         <h3>Sélectionner un mois : </h3>
     </div>
     <div class="col-md-4">
-        <form action="index.php?uc=etatFrais&action=voirEtatFrais" 
+        <form id="lstMois" action=<?php echo $ucEtAction ?> 
               method="post" role="form">
             <div class="form-group">
                 <label for="lstMois" accesskey="n">Mois : </label>

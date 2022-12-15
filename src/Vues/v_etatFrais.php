@@ -73,3 +73,7 @@
         ?>
     </table>
 </div>
+<?php $ucEtAction = "index.php?uc=ConsulterFicheFrais" ?>
+    <button  form="lstMois" class="btn btn-success" type="submit" name="PDF" value="true">
+            Télécharger PDF
+        </button>
