@@ -64,7 +64,7 @@ if (count($lesFraisHorsForfait) > 0)
             $date = implode('-', array_reverse(explode('/',$unFraisHorsForfait['date'])));
             
 
-            $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
+            $libelle = $unFraisHorsForfait['libelle'];
 
 
             $montant = $unFraisHorsForfait['montant']; 

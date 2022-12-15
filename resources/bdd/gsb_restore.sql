@@ -177,7 +177,8 @@ CREATE TABLE IF NOT EXISTS comptable (
 ) ENGINE=InnoDB;
 
 INSERT INTO comptable (id, nom, prenom, login, mdp, adresse, cp, ville, dateembauche) VALUES
-('a198', 'Pignon', 'Aymé', 'ayme', 'P@ssw0rd', '8 rue des Charmant prince', '83220', 'Le Pradet', '2012-12-21');
+('a198', 'Pignon', 'Aymé', 'ayme', 'P@ssw0rd', '8 rue des Charmant prince', '83220', 'Le Pradet', '2012-12-21'),
+('a120', 'Simon', 'Jonathan', 'simon', 'P@ssw0rd', '836 bld', '83100', 'TOULON', '2012-12-01');
 /*
 * Modification des mots de passe
 */

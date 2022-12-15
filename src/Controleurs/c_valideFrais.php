@@ -18,16 +18,21 @@ use Outils\Utilitaires;
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $lesVisiteurs = $pdo->getLesVisiteurs();
-$idDuVisiteur = $_SESSION['idDuVisiteur'] ? $_SESSION['idDuVisiteur'] : filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$lesMois = $pdo->getLesMois($idDuVisiteur);
 $leMois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $ucEtAction = "uc=valideFrais&action=selectionnerMois";
+if(filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS)){
+    $idDuVisiteur = filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+}else {
+    $idDuVisiteur = isset($_SESSION['idDuVisiteur']) ? $_SESSION['idDuVisiteur'] : filter_input(INPUT_POST, 'idVisiteur', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+}
+$lesMois = $pdo->getLesMois($idDuVisiteur);
 include PATH_VIEWS . 'v_listeVisiteurs.php';
 
 switch ($action) {
     case 'selectionnerMois':
         $_SESSION['idDuVisiteur'] = $idDuVisiteur;
         $_SESSION['leMois'] = $leMois;
+
 
         if ($leMois) {
             LoadInformations($pdo, $idDuVisiteur, $leMois);

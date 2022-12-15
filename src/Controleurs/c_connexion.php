@@ -30,7 +30,6 @@ switch ($action) {
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $mdp = filter_input(INPUT_POST, 'mdp', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $visiteur = $pdo->getInfosVisiteur($login, $mdp);
-        $t = $pdo->getMdpVisiteur($login);
         if (!password_verify($mdp, $pdo->getMdpVisiteur($login))) {
             $comptable = $pdo->getInfosComptables($login, $mdp);
             if (!password_verify($mdp, $pdo->getMdpComptable($login))) {
