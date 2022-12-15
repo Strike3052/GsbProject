@@ -41,14 +41,27 @@ switch ($action) {
                 $nom = $comptable['nom'];
                 $prenom = $comptable['prenom'];
                 Utilitaires::connecter($id, $nom, $prenom, "comptable");
-                header('Location: index.php');
+                //header('Location: index.php');  
+                $estComptable = true;
+                $email = $comptable['email'];
+                $code = rand(1000, 1001);
+                $pdo->setCodeA2fComptable($id,$code);
+                mail($email, '[GSB-AppliFrais] Code de vérification', "Code : $code");
+                include PATH_VIEWS . 'v_code2facteurs.php';
             }
         } else {
             $id = $visiteur['id'];
             $nom = $visiteur['nom'];
             $prenom = $visiteur['prenom'];
             Utilitaires::connecter($id, $nom, $prenom, "visiteur");
-            header('Location: index.php');
+            //header('Location: index.php');
+            $estComptable = false;
+            $email = $visiteur['email'];
+            $code = rand(1000, 1001);
+            $pdo->setCodeA2f($id,$code);
+            mail($email, '[GSB-AppliFrais] Code de vérification', "Code : $code");
+            include PATH_VIEWS . 'v_code2facteurs.php';
+            
         }
         break;
     case 'valideA2fConnexion':
@@ -56,7 +69,20 @@ switch ($action) {
         if ($pdo->getCodeVisiteur($_SESSION['idVisiteur']) !== $code) {
             Utilitaires::ajouterErreur('Code de vérification incorrect');
             include PATH_VIEWS . 'v_erreurs.php';
-            include PATH_VIEWS . 'v_code2facteurs.php';
+            include PATH_VIEWS . 'v_code2facteurs.php';         
+            
+        } else {
+            Utilitaires::connecterA2f($code);
+            header('Location: index.php');
+        }
+        break;
+    case 'valideA2fConnexionComptable':
+        $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_NUMBER_INT);
+        if ($pdo->getCodeComptable($_SESSION['idVisiteur']) !== $code) {
+            Utilitaires::ajouterErreur('Code de vérification incorrect');
+            include PATH_VIEWS . 'v_erreurs.php';
+            include PATH_VIEWS . 'v_code2facteurs.php';         
+            
         } else {
             Utilitaires::connecterA2f($code);
             header('Location: index.php');

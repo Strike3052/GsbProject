@@ -28,7 +28,11 @@ abstract class Utilitaires
     {
         return isset($_SESSION['idVisiteur']);
     }
-    
+	
+    public static function connecterA2f($code)
+    {
+    $_SESSION['codeA2f'] = $code;
+    }
     /**
      * Teste si un quelconque visiteur est comptable
      *
