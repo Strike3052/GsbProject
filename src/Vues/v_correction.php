@@ -20,7 +20,7 @@
     <h3>Eléments forfaitisés</h3>
     <div class="col-md-4">
         <form method="post" 
-              action="index.php?uc=valideFrais&action=majFraisHorsForfait" 
+              action="index.php?uc=valideFrais&action=majFrais" 
               role="form">
             <fieldset>       
                 <?php
@@ -73,7 +73,7 @@ if (count($lesFraisHorsForfait) > 0)
             ?>
             
         <form method="post" 
-              action="index.php?uc=valideFrais&action=majFraisHorsForfait" 
+              action="index.php?uc=valideFrais&action=majFrais" 
               role="form">
             <fieldset>   
             <tr>
