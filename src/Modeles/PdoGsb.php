@@ -672,4 +672,104 @@ class PdoGsb {
         $requete->bindParam('idetat', $idEtat, PDO::PARAM_STR);
         $requete->execute();
     }
+    /**
+     * 
+     * @param type $ip
+     */
+    public function ajoutEchecs($ip) {
+        $requete = $this->connexion->prepare(
+                'update journaleEchecs set nbEchecs = nbEchecs+1 where ip = :ip '
+        );
+        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+    }
+    /**
+     * 
+     * @param type $ip
+     * @return type
+     */
+    public function getNbEchecs($ip){
+        $requete = $this->connexion->prepare(
+                'Select nbEchecs from journaleEchecs '
+                . 'where ip = :ip '
+        );
+        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+        return $requete->fetch(PDO::FETCH_NUM)[0];
+    }
+    /**
+     * 
+     * @param type $ip
+     * @return type
+     */
+    public function getHorodatage($ip){
+        $requete = $this->connexion->prepare(
+                "select horodatage from journaleEchecs where ip=:ip"
+        );
+        $requete->bindParam(':ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+        return $requete->fetch(PDO::FETCH_NUM)[0];
+    }
+    
+    public function setHorodatageNbSeconde($ip, int $seconde):void{
+        $date = new \DateTime();
+        $requete = $this->connexion->prepare(
+                "update journaleEchecs set horodatage = :date "
+                . "where ip = :ip"
+        );
+        $requete->bindParam('date', $date);
+        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+    }
+    
+    /**
+     * 
+     * @param type $ip
+     */
+    public function ajoutIpJournal($ip):void{
+        $requete = $this->connexion->prepare(
+                "insert into journaleEchecs (ip) values (:ip)"
+        );
+        $requete->bindParam(':ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+    }
+    
+    /**
+     * 
+     * @param type $ip
+     * @return bool
+     */
+    public function is_NotExistIp ($ip):bool{
+        $requete = $this->connexion->prepare(
+                "Select ip from journaleEchecs where ip=:ip"
+        );
+        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+        $bool=false;
+        if(!$requete->fetch()){
+            $bool = true;
+        }
+        return $bool;
+    }
+    
+    /**
+     * 
+     * @param type $ip
+     */
+    public function restartNbErreurs($ip):void{
+        $requete = $this->connexion->prepare(
+                "update journaleEchecs set nbEchecs = 0 where ip=:ip"
+        );
+        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+    }
+    
+    public function setHorodatageNull($ip):void{
+        $requete = $this->connexion->prepare(
+                "update journaleEchecs set horodatage = null "
+                . "where ip = :ip"
+        );
+        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
+        $requete->execute();
+    }
 }

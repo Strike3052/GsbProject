@@ -14,7 +14,6 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
 use Outils\Utilitaires;
 
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -22,18 +21,38 @@ if (!$uc) {
     $uc = 'demandeconnexion';
 }
 
+$ip = $_SERVER['REMOTE_ADDR'];
+if ($pdo->is_NotExistIp($ip)) {
+    $pdo->ajoutIpJournal($ip);
+}
+//On vérifie si l'utilisateur a 3erreurs ou plus
+if ($pdo->getNbEchecs($ip) >= 3) {
+    $horodatage = $pdo->getHorodatage($ip);
+    if ($horodatage <> null || strtotime($horodatage) > 20) {
+        $pdo->restartNbErreurs($ip);
+        $pdo->setHorodatageNull($ip);
+    } else {
+        $action = 'blocage';
+        $pdo->setHorodatageNbSeconde($ip, 3600);
+    }
+}
+
 switch ($action) {
     case 'demandeConnexion':
         include PATH_VIEWS . 'v_connexion.php';
         break;
     case 'valideConnexion':
+
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $mdp = filter_input(INPUT_POST, 'mdp', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $visiteur = $pdo->getInfosVisiteur($login, $mdp);
         if (!password_verify($mdp, $pdo->getMdpVisiteur($login))) {
             $comptable = $pdo->getInfosComptables($login, $mdp);
             if (!password_verify($mdp, $pdo->getMdpComptable($login))) {
+                //si pas comptable et pas visiteur
+                $pdo->ajoutEchecs($ip);
                 Utilitaires::ajouterErreur('Login ou mot de passe incorrect');
+
                 include PATH_VIEWS . 'v_erreurs.php';
                 include PATH_VIEWS . 'v_connexion.php';
             } else {
@@ -42,6 +61,7 @@ switch ($action) {
                 $prenom = $comptable['prenom'];
                 Utilitaires::connecter($id, $nom, $prenom, "comptable");
                 header('Location: index.php');
+                $pdo->restartNbErreurs($ip);
             }
         } else {
             $id = $visiteur['id'];
@@ -49,6 +69,7 @@ switch ($action) {
             $prenom = $visiteur['prenom'];
             Utilitaires::connecter($id, $nom, $prenom, "visiteur");
             header('Location: index.php');
+            $pdo->restartNbErreurs($ip);
         }
         break;
     case 'valideA2fConnexion':
@@ -61,6 +82,9 @@ switch ($action) {
             Utilitaires::connecterA2f($code);
             header('Location: index.php');
         }
+        break;
+    case 'blocage':
+        include_once PATH_VIEWS . 'v_blocage.php';
         break;
     default:
         include PATH_VIEWS . 'v_connexion.php';

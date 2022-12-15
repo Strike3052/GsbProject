@@ -266,4 +266,8 @@ abstract class Utilitaires
             return count($_REQUEST['erreurs']);
         }
     }
+    
+    public static function ajoutEchecs($ip){
+        
+    }
 }
