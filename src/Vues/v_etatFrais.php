@@ -73,3 +73,8 @@
         ?>
     </table>
 </div>
+<div>
+    <button class="btn btn-success" form="selectMois" type="submit" name="dllPDF" value="true" >
+        Télécharger PDF
+    </button>
+</div>
