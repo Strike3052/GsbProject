@@ -15,6 +15,7 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
 use Outils\Utilitaires;
+use App\Entity\Pdf;
 
 $idVisiteur = $_SESSION['idVisiteur'];
 $lemois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
