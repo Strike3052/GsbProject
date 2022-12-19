@@ -20,6 +20,10 @@ class ComposerStaticInitb61b79819ae9165507c7f3b1ebfa76b0
         array (
             'Modeles\\' => 8,
         ),
+        'F' => 
+        array (
+            'FPDF\\' => 5,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -42,6 +46,10 @@ class ComposerStaticInitb61b79819ae9165507c7f3b1ebfa76b0
         'Modeles\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/Modeles',
+        ),
+        'FPDF\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/fpdf185',
         ),
         'App\\' => 
         array (
