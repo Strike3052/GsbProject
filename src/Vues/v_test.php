@@ -36,12 +36,12 @@ function Footer() {
 
 }
 }
-// Connexion à la base
-//$link = mysqli_connect('localhost','userGsb','secret','gsb_frais');
-
 ob_clean();
 $pdf = new v_test();
 $pdf->AddPage();
 $pdf->AliasNbPages();
 $pdf->SetFont('Times','',12);
 $pdf->Output();
+$pdf->Cell(90,10,$row['id'],0,0,'C');
+$pdf->Cell(0,10,$row['prenom']." ".$row['nom'],0,0,'R');
+$pdf->Cell(0,50,'Visiteur',0,0,'L');

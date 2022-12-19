@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Vue État de Frais
  *
@@ -14,12 +13,11 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
 ?>
 <hr>
 <div class="panel panel-primary">
     <div class="panel-heading">Fiche de frais du mois 
-        <?php echo $numMois . '-' . $numAnnee ?> : </div>
+<?php echo $numMois . '-' . $numAnnee ?> : </div>
     <div class="panel-body">
         <strong><u>Etat :</u></strong> <?php echo $libEtat ?>
         depuis le <?php echo $dateModif ?> <br> 
@@ -30,9 +28,10 @@
     <div class="panel-heading">Eléments forfaitisés</div>
     <table class="table table-bordered table-responsive">
         <tr>
-            <?php
-            foreach ($lesFraisForfait as $unFraisForfait) {
-                $libelle = $unFraisForfait['libelle']; ?>
+<?php
+foreach ($lesFraisForfait as $unFraisForfait) {
+    $libelle = $unFraisForfait['libelle'];
+    ?>
                 <th> <?php echo htmlspecialchars($libelle) ?></th>
                 <?php
             }
@@ -41,7 +40,8 @@
         <tr>
             <?php
             foreach ($lesFraisForfait as $unFraisForfait) {
-                $quantite = $unFraisForfait['quantite']; ?>
+                $quantite = $unFraisForfait['quantite'];
+                ?>
                 <td class="qteForfait"><?php echo $quantite ?> </td>
                 <?php
             }
@@ -62,7 +62,8 @@
         foreach ($lesFraisHorsForfait as $unFraisHorsForfait) {
             $date = $unFraisHorsForfait['date'];
             $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
-            $montant = $unFraisHorsForfait['montant']; ?>
+            $montant = $unFraisHorsForfait['montant'];
+            ?>
             <tr>
                 <td><?php echo $date ?></td>
                 <td><?php echo $libelle ?></td>
@@ -74,7 +75,9 @@
     </table>
 </div>
 <div>
-    <button class="btn btn-success" form="selectMois" type="submit" name="dllPDF" value="true" >
-        Télécharger PDF
-    </button>
+    <form action="index.php?uc=dllPDF" method="post" role="form">
+        <button class="btn btn-success" type="submit" name="btnDll" value=<?php echo $leMois ?> >
+            Télécharger PDF
+        </button>
+    </form>
 </div>

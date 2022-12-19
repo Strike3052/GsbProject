@@ -185,3 +185,16 @@ INSERT INTO comptable (id, nom, prenom, login, mdp, adresse, cp, ville, dateemba
 ALTER TABLE `visiteur` CHANGE `mdp` `mdp` CHAR(255);
 
 ALTER TABLE `comptable` CHANGE `mdp` `mdp` CHAR(255);
+
+/*
+* Facteur A2F
+*/
+ALTER TABLE visiteur ADD email TEXT NULL;
+UPDATE visiteur SET email = CONCAT(login,"@swiss-galaxy.com");
+
+ALTER TABLE comptable ADD email TEXT NULL;
+UPDATE comptable SET email = CONCAT(login,"@swiss-galaxy.com");
+
+ALTER TABLE visiteur ADD codea2f CHAR(4);
+
+ALTER TABLE comptable ADD codea2f CHAR(4);
