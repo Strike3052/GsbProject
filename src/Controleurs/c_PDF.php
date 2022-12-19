@@ -19,11 +19,13 @@ use App\Entity\Pdf;
 
 $idVisiteur = $_SESSION['idVisiteur'];
 $lemois = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$numAnnee = substr($lemois, 0, 4);
+$numMois = substr($lemois, 4, 2);
 $infoVisiteur = $pdo->getNomPrenomVisiteur($idVisiteur, $lemois);
-$fraisforfaitVehicule= $pdo->getFicheForfaitDetailsVehicule($idVisiteur,$lemois);
-$fraisforfaitNuitee= $pdo->getFicheForfaitDetailsNuitee($idVisiteur,$lemois);
-$fraisforfait= $pdo->getFicheForfaitDetails($idVisiteur,$lemois);
+$fraisforfaitVehicule = $pdo->getFicheForfaitDetailsVehicule($idVisiteur, $lemois);
+$fraisforfaitNuitee = $pdo->getFicheForfaitDetailsNuitee($idVisiteur, $lemois);
+$fraisforfait = $pdo->getFicheForfaitDetails($idVisiteur, $lemois);
 $horsforfait = $pdo->getLesFraisHorsForfaitDetails($idVisiteur, $lemois);
 
-include'C:\Users\j974g\Documents\NetBeansProjects\GsbProject\src\Entity\Pdf.php';
+include'../src/Entity/Pdf.php';
 

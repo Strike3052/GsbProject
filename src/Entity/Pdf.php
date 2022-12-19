@@ -126,15 +126,15 @@ public $total;
     }
     
     }
-function totalPrix ($date){
+function totalPrix ($numMois,$numAnnee){
     global $pdf;
     $pdf->SetDrawColor( 31,73,125); // Couleur du fond RVB
     $pdf->SetFillColor(255); // Couleur des filets RVB
     $pdf->SetTextColor( 1); // Couleur du texte 
     $pdf->SetX(110); 
-    $pdf->Cell(50,8,'Total '.utf8_decode($date),1,0,'C',1);
+    $pdf->Cell(50,8,'TOTAL '. $numAnnee.'/'.$numMois,1,0,'L',1);
     $pdf->SetX(160); 
-    $pdf->Cell(40,8, $this->total,1,0,'C',1);
+    $pdf->Cell(40,8, $this->total,1,0,'R',1);
 }
 
 
@@ -168,11 +168,11 @@ $pdf->Cell(80,30,'Visiteur',0,0,'C');
 $pdf->Cell(120,30, $infoVisiteur['prenom'].' '.$infoVisiteur['nom'],0,0,'C');
 $pdf->Cell(-320,60,'Mois',0,0,'C');
 $pdf->SetX(10); 
-$pdf->Cell(0,60,$lemois,0,0,'C');
+$pdf->Cell(0,60,$numMois .'/'. $numAnnee,0,0,'C');
 $pdf->Ln(40);
 $pdf->tableauFraisForfait(100,$fraisforfaitNuitee, $fraisforfaitVehicule,$fraisforfait);
 $pdf->SetTextColor(30, 73, 125);
 $pdf->SetFont('', 'B');
 $pdf->tableau2(140,$horsforfait);
-$pdf->totalPrix($lemois);
+$pdf->totalPrix($numAnnee,$numMois);
 $pdf->Output();
