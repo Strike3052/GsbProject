@@ -18,6 +18,7 @@ use Outils\Utilitaires;
 use App\Entity\Pdf;
 
 $idVisiteur = $_SESSION['idVisiteur'];
+
 $lemois = filter_input(INPUT_POST, 'btnDll', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $numAnnee = substr($lemois, 0, 4);
 $numMois = substr($lemois, 4, 2);
@@ -45,4 +46,3 @@ $pdf->SetFont('', 'B');
 $pdf->tableau2(140, $horsforfait);
 $pdf->totalPrix($numAnnee, $numMois);
 $pdf->Output();
-
