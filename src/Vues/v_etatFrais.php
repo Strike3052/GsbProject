@@ -76,7 +76,7 @@ foreach ($lesFraisForfait as $unFraisForfait) {
 </div>
 <div>
     <form action="index.php?uc=dllPDF" method="post" role="form">
-        <button class="btn btn-success" type="submit" name="btnDll" value="<?php $leMois ?>" >
+        <button class="btn btn-success" type="submit" name="btnDll" value=<?php echo $leMois ?> >
             Télécharger PDF
         </button>
     </form>
