@@ -14,8 +14,10 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-if(!isset($ucEtAction)){
-    $ucEtAction = 'index.php?uc=etatFrais&action=voirEtatFrais';
+if(filter_input(INPUT_POST, 'dllPDF', FILTER_SANITIZE_FULL_SPECIAL_CHARS)){
+    $ucEtAction = "uc=dllPDF";
+}else{
+    $ucEtAction = "uc=etatFrais&action=voirEtatFrais";
 }
 ?>
 <h2>Mes fiches de frais</h2>
@@ -24,7 +26,8 @@ if(!isset($ucEtAction)){
         <h3>Sélectionner un mois : </h3>
     </div>
     <div class="col-md-4">
-        <form id="lstMois" action=<?php echo $ucEtAction ?> 
+        <form id="selectMois"
+              action="index.php?<?php echo $ucEtAction ?>" 
               method="post" role="form">
             <div class="form-group">
                 <label for="lstMois" accesskey="n">Mois : </label>

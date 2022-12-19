@@ -84,16 +84,17 @@ class PdoGsb {
      * @param String $login Login du visiteur
      * @param String $mdp   Mot de passe du visiteur
      *
-     * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
+     * @return l'id, le nom, le prénom et le mail sous la forme d'un tableau associatif
      */
-    public function getInfosVisiteur($login) {
+    public function getInfosVisiteur($login)
+    {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT visiteur.id AS id, visiteur.nom AS nom, '
-                . 'visiteur.prenom AS prenom '
-                . 'FROM visiteur '
-                . 'WHERE visiteur.login = :unLogin '
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+            . 'visiteur.prenom AS prenom, visiteur.email as email '
+            . 'FROM visiteur '
+            . 'WHERE visiteur.login = :unLogin '
         );
-        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);      
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
@@ -104,16 +105,17 @@ class PdoGsb {
      * @param String $login Login du comptable
      * @param String $mdp   Mot de passe du comptable
      *
-     * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
+     * @return l'id, le nom, le prénom et le mail sous la forme d'un tableau associatif
      */
-    public function getInfosComptables($login) {
+    public function getInfosComptables($login)
+    {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT comptable.id AS id, comptable.nom AS nom, '
-                . 'comptable.prenom AS prenom '
-                . 'FROM comptable '
-                . 'WHERE comptable.login = :unLogin'
+            'SELECT comptable.id AS id, comptable.nom AS nom, '
+            . 'comptable.prenom AS prenom, comptable.email as email '
+            . 'FROM comptable '
+            . 'WHERE comptable.login = :unLogin'
         );
-        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);      
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
@@ -703,7 +705,30 @@ class PdoGsb {
         $requete->bindParam('idetat', $idEtat, PDO::PARAM_STR);
         $requete->execute();
     }
-        public function setCodeA2f($id, $code) {
+    
+    public function getNomPrenomVisiteur($id) {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+            . 'visiteur.prenom AS prenom '
+            . 'FROM visiteur '
+            . 'WHERE visiteur.id = :unId '
+        );
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);      
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    
+    public function getFicheForfaitDetails($id, $date) {
+        $requetePrepare = $this->connexion->prepare(
+            'select fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, (lignefraisforfait.quantite * fraisforfait.montant) as total from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where lignefraisforfait.mois = :uneDate and lignefraisforfait.idvisiteur=:unId group by fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, total LIMIT 4 OFFSET 1;'
+        );
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);  
+        $requetePrepare->bindParam(':uneDate', $date, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    
+    public function setCodeA2f($id, $code) {
         $requetePrepare = $this->connexion->prepare(
             'UPDATE visiteur '
             . 'SET codea2f = :unCode '
@@ -746,4 +771,3 @@ class PdoGsb {
         return $requetePrepare->fetch()['codea2f'];
     }
 }
-

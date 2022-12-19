@@ -69,8 +69,7 @@ switch ($action) {
         if ($pdo->getCodeVisiteur($_SESSION['idVisiteur']) !== $code) {
             Utilitaires::ajouterErreur('Code de vérification incorrect');
             include PATH_VIEWS . 'v_erreurs.php';
-            include PATH_VIEWS . 'v_code2facteurs.php';         
-            
+            include PATH_VIEWS . 'v_code2facteurs.php';
         } else {
             Utilitaires::connecterA2f($code);
             header('Location: index.php');

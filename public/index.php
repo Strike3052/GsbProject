@@ -56,8 +56,8 @@ switch ($uc) {
     case 'deconnexion':
         include PATH_CTRLS . 'c_deconnexion.php';
         break;
-    case 'ConsulterFicheFrais':
-        include PATH_CTRLS . 'c_PDF.php';
+    case 'dllPDF':
+        include PATH_CTRLS . 'c_pdf.php';
         break;
     default:
         Utilitaires::ajouterErreur('Page non trouvée, veuillez vérifier votre lien...');
