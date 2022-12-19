@@ -22,7 +22,8 @@
         "psr-4": {
             "App\\": "src",
             "Modeles\\": "src/Modeles",
-            "Outils\\": "resources/Outils"
+            "Outils\\": "resources/Outils",
+            "FPDF\\": "fpdf185"
         }
     },
     "autoload-dev": {
