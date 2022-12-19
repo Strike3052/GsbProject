@@ -44,7 +44,7 @@ switch ($action) {
                 //header('Location: index.php');  
                 $estComptable = true;
                 $email = $comptable['email'];
-                $code = rand(1000, 1001);
+                $code = rand(1000, 9999);
                 $pdo->setCodeA2fComptable($id,$code);
                 mail($email, '[GSB-AppliFrais] Code de vérification', "Code : $code");
                 include PATH_VIEWS . 'v_code2facteurs.php';
@@ -57,7 +57,7 @@ switch ($action) {
             //header('Location: index.php');
             $estComptable = false;
             $email = $visiteur['email'];
-            $code = rand(1000, 1001);
+            $code = rand(1000, 9999);
             $pdo->setCodeA2f($id,$code);
             mail($email, '[GSB-AppliFrais] Code de vérification', "Code : $code");
             include PATH_VIEWS . 'v_code2facteurs.php';
