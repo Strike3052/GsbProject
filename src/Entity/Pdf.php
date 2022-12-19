@@ -11,12 +11,6 @@ use FPDF\FPDF;
 
 class Pdf extends FPDF {
 
-    protected $ProcessingTable = false;
-    protected $aCols = array();
-    protected $TableX;
-    protected $HeaderColor;
-    protected $RowColors;
-    protected $ColorIndex;
     public $total;
 
     public function __construct(){

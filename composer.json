@@ -23,7 +23,7 @@
             "App\\": "src",
             "Modeles\\": "src/Modeles",
             "Outils\\": "resources/Outils",
-            "FPDF\\": "fpdf185"
+            "FPDF\\": "resources/fpdf185"
         }
     },
     "autoload-dev": {

@@ -49,7 +49,7 @@ class ComposerStaticInitb61b79819ae9165507c7f3b1ebfa76b0
         ),
         'FPDF\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/fpdf185',
+            0 => __DIR__ . '/../..' . '/resources/fpdf185',
         ),
         'App\\' => 
         array (
