@@ -718,7 +718,7 @@ class PdoGsb {
         return $requetePrepare->fetch();
     }
     
-    public function getFicheForfaitDetails($id, $date) {
+    public function getFicheForfaitDetailsVehicule($id, $date) {
         $requetePrepare = $this->connexion->prepare(
             'select fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, (lignefraisforfait.quantite * fraisforfait.montant) as total from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where lignefraisforfait.mois = :uneDate and lignefraisforfait.idvisiteur=:unId group by fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, total LIMIT 4 OFFSET 1;'
         );
@@ -726,6 +726,41 @@ class PdoGsb {
         $requetePrepare->bindParam(':uneDate', $date, PDO::PARAM_STR);
         $requetePrepare->execute();
         return $requetePrepare->fetch();
+    }
+    public function getFicheForfaitDetailsNuitee($id, $date) {
+        $requetePrepare = $this->connexion->prepare(
+            'select fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, (lignefraisforfait.quantite * fraisforfait.montant) as total from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where lignefraisforfait.mois = :uneDate and lignefraisforfait.idvisiteur=:unId group by fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, total LIMIT 4 OFFSET 2;'
+        );
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);  
+        $requetePrepare->bindParam(':uneDate', $date, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    public function getFicheForfaitDetails($id, $date) {
+        $requetePrepare = $this->connexion->prepare(
+            'select fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, (lignefraisforfait.quantite * fraisforfait.montant) as total from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where lignefraisforfait.mois = :uneDate and lignefraisforfait.idvisiteur=:unId group by fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, total LIMIT 4 OFFSET 3;'
+        );
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);  
+        $requetePrepare->bindParam(':uneDate', $date, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    public function getLesFraisHorsForfaitDetails($idVisiteur, $mois): array {
+        $requetePrepare = $this->connexion->prepare(
+                'SELECT date, libelle, montant FROM lignefraishorsforfait '
+                . 'WHERE lignefraishorsforfait.idvisiteur = :unIdVisiteur '
+                . 'AND lignefraishorsforfait.mois = :unMois'
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $lesLignes = $requetePrepare->fetchAll();
+        $nbLignes = count($lesLignes);
+        for ($i = 0; $i < $nbLignes; $i++) {
+            $date = $lesLignes[$i]['date'];
+            $lesLignes[$i]['date'] = Utilitaires::dateAnglaisVersFrancais($date);
+        }
+        return $lesLignes;
     }
     
     public function setCodeA2f($id, $code) {

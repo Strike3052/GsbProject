@@ -15,7 +15,7 @@ protected $TableX;
 protected $HeaderColor;
 protected $RowColors;
 protected $ColorIndex;
-    
+public $total;    
         function Header()
     {
         // Logo
@@ -31,70 +31,116 @@ protected $ColorIndex;
         $this->Cell(180,8,'REMBOURSEMENT DE FRAIS ENGAGES',1,0,'C');
 
     }
-function Table($header, $data)
-{
-    // Largeurs des colonnes
-    $w = array(40, 80, 40);
-    // En-tête
-    for($i=0;$i<count($header);$i++)
-        $this->Cell($w[$i],7,$header[$i],1,0,'C');
-    $this->Ln();
-    // Données
-    foreach($data as $row)
-    {
-        $this->Cell($w[0],6,$row[0],'LR');
-        $this->Cell($w[1],6,$row[1],'LR');    
-        $this->Cell($w[2],6,$row[2],'LR'); 
-        $this->Ln();
+    
+    function tableauFraisForfait($position_ligne1, $fraisforfaitNuitee,$fraisforfaitVehicule, $fraisforfait){
+    global $pdf;
+    $pdf->SetFont('Times','I',12);
+   $pdf->SetDrawColor( 31,73,125); // Couleur du fond RVB
+   $pdf->SetFillColor(255); // Couleur des filets RVB
+    $pdf->SetTextColor( 31,73,125); // Couleur du texte 
+    $pdf->SetY($position_ligne1);
+    $pdf->Cell(50,8,'frais forfaitaires',1,0,'C',1);  // 60 >largeur colonne, 8 >hauteur colonne
+		// position de la colonne 2 (70 = 10+60)
+    $pdf->SetX(60); 
+    $pdf->Cell(50,8,utf8_decode('Quantité'),1,0,'C',1);
+    // position de la colonne 3 (130 = 70+60)
+    $pdf->SetX(110); 
+    $pdf->Cell(50,8,'Montant unitaire',1,0,'C',1);
+    $pdf->SetX(160); 
+    $pdf->Cell(40,8,'Total',1,0,'C',1);
+    $pdf->Ln(); // Retour à la ligne
+    
+    
+    $pdf->SetDrawColor( 31,73,125); // Couleur du fond RVB
+    $pdf->SetFillColor(255); // Couleur des filets RVB
+    $pdf->SetTextColor( 1); // Couleur du texte 
+    $pdf->SetY($position_ligne1+8);
+    $pdf->Cell(50,8, utf8_decode('Véhicule'),1,0,'L',1);  // 60 >largeur colonne, 8 >hauteur colonne
+    // position de la colonne 2 (70 = 10+60)
+    $pdf->SetX(60); 
+    $pdf->Cell(50,8,$fraisforfaitVehicule[1],1,0,'R',1);
+    // position de la colonne 3 (130 = 70+60)
+    $pdf->SetX(110); 
+    $pdf->Cell(50,8,$fraisforfaitVehicule[2],1,0,'R',1);
+    $pdf->SetX(160); 
+    $pdf->Cell(40,8,$fraisforfaitVehicule[3],1,0,'R',1);
+    $this->total+= $fraisforfaitVehicule[3];
+    $pdf->Ln(); // Retour à la ligne
+    $pdf->Cell(50,8,utf8_decode('Nuitée'),1,0,'L',1);  // 60 >largeur colonne, 8 >hauteur colonne
+    // position de la colonne 2 (70 = 10+60)
+    $pdf->SetX(60); 
+    $pdf->Cell(50,8,$fraisforfaitNuitee[1],1,0,'R',1);
+    // position de la colonne 3 (130 = 70+60)
+    $pdf->SetX(110); 
+    $pdf->Cell(50,8,$fraisforfaitNuitee[2],1,0,'R',1);
+    $pdf->SetX(160); 
+    $pdf->Cell(40,8,$fraisforfaitNuitee[3],1,0,'R',1);
+    $this->total+=$fraisforfaitNuitee[3];
+    $pdf->Ln();
+    
+    $pdf->Cell(50,8,'Repas Midi',1,0,'L',1);  // 60 >largeur colonne, 8 >hauteur colonne
+    // position de la colonne 2 (70 = 10+60)
+    $pdf->SetX(60); 
+    $pdf->Cell(50,8,$fraisforfait[1],1,0,'R',1);
+    // position de la colonne 3 (130 = 70+60)
+    $pdf->SetX(110); 
+    $pdf->Cell(50,8,$fraisforfait[2],1,0,'R',1);
+    $pdf->SetX(160); 
+    $pdf->Cell(40,8,$fraisforfait[3],1,0,'R',1);
+    $this->total+=$fraisforfait[3];
+    $pdf->Ln();
     }
-    // Trait de terminaison
-    $this->Cell(array_sum($w),0,'','T');
+    
+    function tableau2($position2, $horsforfait){
+    global $pdf;
+    $pdf->SetY($position2-8);
+    $pdf->Cell(0,8,'Autres Frais',0,0,'C',1);
+    $pdf->SetFont('Times','I',12);
+    $pdf->SetDrawColor( 31,73,125); // Couleur du fond RVB
+    $pdf->SetFillColor(255); // Couleur des filets RVB
+    $pdf->SetTextColor( 31,73,125); // Couleur du texte 
+    $pdf->SetY($position2);
+    $pdf->Cell(50,8,'Date',1,0,'C',1);  // 60 >largeur colonne, 8 >hauteur colonne		
+    $pdf->SetX(60); 
+    $pdf->Cell(100,8,utf8_decode('Libellé'),1,0,'C',1);
+    // position de la colonne 3 (130 = 70+60)
+    $pdf->SetX(160); 
+    $pdf->Cell(40,8,'montant',1,0,'C',1);
+   
+    
+    $pdf->SetDrawColor( 31,73,125); // Couleur du fond RVB
+    $pdf->SetFillColor(255); // Couleur des filets RVB
+    $pdf->SetTextColor( 1); // Couleur du texte  
+    $ligne=0;
+    while($ligne< count($horsforfait)){
+    $position2+=8;
+    $pdf->SetY($position2); 
+    $pdf->Cell(50,8,$horsforfait[$ligne]['date'],1,0,'L',1);
+    $pdf->SetX(60); 
+    $pdf->Cell(100,8,utf8_decode($horsforfait[$ligne]['libelle']),1,0,'L',1);
+    $pdf->SetX(160);    
+    $pdf->Cell(40,8,$horsforfait[$ligne]['montant'],1,0,'R',1);
+    $this->total+=$horsforfait[$ligne]['montant'];
+    $pdf->Ln();
+    $ligne++;
+    }
+    
+    }
+function totalPrix ($date){
+    global $pdf;
+    $pdf->SetDrawColor( 31,73,125); // Couleur du fond RVB
+    $pdf->SetFillColor(255); // Couleur des filets RVB
+    $pdf->SetTextColor( 1); // Couleur du texte 
+    $pdf->SetX(110); 
+    $pdf->Cell(50,8,'Total '.utf8_decode($date),1,0,'C',1);
+    $pdf->SetX(160); 
+    $pdf->Cell(40,8, $this->total,1,0,'C',1);
 }
-    // Tableau amélioré
-function ImprovedTable($header, $data)
-{
-    // Largeurs des colonnes
-    $w = array(40, 35, 45, 40);
-    // En-tête
-    for($i=0;$i<count($header);$i++)
-        $this->Cell($w[$i],7,$header[$i],1,0,'C');
-    $this->Ln();
-    // Données
-    foreach($data as $row)
-    {
-        $this->Cell($w[0],6,$row[0],'LR');
-        $this->Cell($w[1],6,$row[1],'LR');
-        $this->Cell($w[2],6,$row[2],'LR');
-        //$this->Cell($w[3],6,$row[3],'LR');
-        $this->Ln();
-    }
-    // Trait de terminaison
-    $this->Cell(array_sum($w),0,'','T');
-}
 
 
-    function Row($data)
-    {
-    $this->SetX($this->TableX);
-    $ci=$this->ColorIndex;
-    $fill=!empty($this->RowColors[$ci]);
-    if($fill)
-        $this->SetFillColor($this->RowColors[$ci][0],$this->RowColors[$ci][1],$this->RowColors[$ci][2]);
-    foreach($this->aCols as $col)
-        $this->Cell($col['w'],5,$data[$col['f']],1,0,$col['a'],$fill);
-    $this->Ln();
-    $this->ColorIndex=1-$ci;
-    }
 
-    function AddCol($field=-1, $width=-1, $caption='', $align='L')
-    {
-    // Add a column to the table
-    if($field==-1)
-        $field=count($this->aCols);
-    $this->aCols[]=array('f'=>$field,'c'=>$caption,'w'=>$width,'a'=>$align);
-    }
 
-        function Footer() 
+    function Footer() 
     {
         $this->SetY(-80);
         $this->SetFont('Arial','I',10);
@@ -121,11 +167,12 @@ $pdf->Cell(-180,30,$idVisiteur,0,0,'C');
 $pdf->Cell(80,30,'Visiteur',0,0,'C');
 $pdf->Cell(120,30, $infoVisiteur['prenom'].' '.$infoVisiteur['nom'],0,0,'C');
 $pdf->Cell(-320,60,'Mois',0,0,'C');
-$pdf->Cell(-100,60,$lemois,0,0,'L');
-$pdf->Ln(60);
-$entete1=array('Frais Forfaitaires','Quantite','Montant unitaire', 'Total');
-$entete2=array('Date','Libelle','Montant');
-$pdf->ImprovedTable($entete1, $fraisforafait);
-$pdf->Ln(60);
-//$pdf->Table($entete2, $horsforfait);
+$pdf->SetX(10); 
+$pdf->Cell(0,60,$lemois,0,0,'C');
+$pdf->Ln(40);
+$pdf->tableauFraisForfait(100,$fraisforfaitNuitee, $fraisforfaitVehicule,$fraisforfait);
+$pdf->SetTextColor(30, 73, 125);
+$pdf->SetFont('', 'B');
+$pdf->tableau2(140,$horsforfait);
+$pdf->totalPrix($lemois);
 $pdf->Output();

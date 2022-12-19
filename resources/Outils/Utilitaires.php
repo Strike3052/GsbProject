@@ -122,7 +122,7 @@ abstract class Utilitaires
         }
         return $annee . $mois;
     }
-
+    
     /* gestion des erreurs */
 
     /**
