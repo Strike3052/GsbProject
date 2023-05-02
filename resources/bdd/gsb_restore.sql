@@ -177,10 +177,24 @@ CREATE TABLE IF NOT EXISTS comptable (
 ) ENGINE=InnoDB;
 
 INSERT INTO comptable (id, nom, prenom, login, mdp, adresse, cp, ville, dateembauche) VALUES
-('a198', 'Pignon', 'Aymé', 'ayme', 'P@ssw0rd', '8 rue des Charmant prince', '83220', 'Le Pradet', '2012-12-21');
+('a198', 'Pignon', 'Aymé', 'ayme', 'P@ssw0rd', '8 rue des Charmant prince', '83220', 'Le Pradet', '2012-12-21'),
+('a120', 'Simon', 'Jonathan', 'simon', 'P@ssw0rd', '836 bld', '83100', 'TOULON', '2012-12-01');
 /*
 * Modification des mots de passe
 */
 ALTER TABLE `visiteur` CHANGE `mdp` `mdp` CHAR(255);
 
 ALTER TABLE `comptable` CHANGE `mdp` `mdp` CHAR(255);
+
+/*
+* Facteur A2F
+*/
+ALTER TABLE visiteur ADD email TEXT NULL;
+UPDATE visiteur SET email = CONCAT(login,"@swiss-galaxy.com");
+
+ALTER TABLE comptable ADD email TEXT NULL;
+UPDATE comptable SET email = CONCAT(login,"@swiss-galaxy.com");
+
+ALTER TABLE visiteur ADD codea2f CHAR(4);
+
+ALTER TABLE comptable ADD codea2f CHAR(4);

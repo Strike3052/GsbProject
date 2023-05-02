@@ -14,7 +14,6 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
 ?>
 <h2>Mes fiches de frais</h2>
 <div class="row">

@@ -84,16 +84,17 @@ class PdoGsb {
      * @param String $login Login du visiteur
      * @param String $mdp   Mot de passe du visiteur
      *
-     * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
+     * @return l'id, le nom, le prénom et le mail sous la forme d'un tableau associatif
      */
-    public function getInfosVisiteur($login) {
+    public function getInfosVisiteur($login)
+    {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT visiteur.id AS id, visiteur.nom AS nom, '
-                . 'visiteur.prenom AS prenom '
-                . 'FROM visiteur '
-                . 'WHERE visiteur.login = :unLogin '
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+            . 'visiteur.prenom AS prenom, visiteur.email as email '
+            . 'FROM visiteur '
+            . 'WHERE visiteur.login = :unLogin '
         );
-        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);      
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
@@ -104,16 +105,17 @@ class PdoGsb {
      * @param String $login Login du comptable
      * @param String $mdp   Mot de passe du comptable
      *
-     * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
+     * @return l'id, le nom, le prénom et le mail sous la forme d'un tableau associatif
      */
-    public function getInfosComptables($login) {
+    public function getInfosComptables($login)
+    {
         $requetePrepare = $this->connexion->prepare(
-                'SELECT comptable.id AS id, comptable.nom AS nom, '
-                . 'comptable.prenom AS prenom '
-                . 'FROM comptable '
-                . 'WHERE comptable.login = :unLogin'
+            'SELECT comptable.id AS id, comptable.nom AS nom, '
+            . 'comptable.prenom AS prenom, comptable.email as email '
+            . 'FROM comptable '
+            . 'WHERE comptable.login = :unLogin'
         );
-        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);      
         $requetePrepare->execute();
         return $requetePrepare->fetch();
     }
@@ -362,6 +364,37 @@ class PdoGsb {
         $requetePrepare->bindParam(':idFrais', $idFrais, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
+    
+    
+    /**
+     * Met à jour la table ligneFraisHorsForfait
+     * Met à jour la table ligneFraisHorsForfait pour un frais hors forfait et
+     * un mois donné en reportant d'un mois le fraisHorsForfait
+     *
+     * @param String $idVisiteur ID du visiteur
+     * @param String $mois       Mois sous la forme aaaamm
+     * @param Array  $lesFrais   tableau associatif de clé idFrais et
+     *                           de valeur la quantité pour ce frais
+     *
+     * @return null
+     */
+    public function majFraisHorsForfaitReport($idFrais, $date,$mois, $libelle, $montant): void
+    {
+        $requetePrepare = $this->connexion->prepare(
+            'UPDATE lignefraishorsforfait '
+            . 'SET lignefraishorsforfait.date = :date, '
+            . 'lignefraishorsforfait.libelle = :libelle, lignefraishorsforfait.montant = :montant, lignefraishorsforfait.mois=:mois '
+            . 'WHERE lignefraishorsforfait.id = :idFrais '
+        );
+        $requetePrepare->bindParam(':date', $date, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':mois', $mois, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':libelle', $libelle, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':montant', $montant, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':idFrais', $idFrais, PDO::PARAM_STR);
+        $requetePrepare->execute();
+    }
+    
+ 
 
     /**
      * Met à jour le nombre de justificatifs de la table ficheFrais
@@ -672,104 +705,104 @@ class PdoGsb {
         $requete->bindParam('idetat', $idEtat, PDO::PARAM_STR);
         $requete->execute();
     }
-    /**
-     * 
-     * @param type $ip
-     */
-    public function ajoutEchecs($ip) {
-        $requete = $this->connexion->prepare(
-                'update journaleEchecs set nbEchecs = nbEchecs+1 where ip = :ip '
+    
+    public function getNomPrenomVisiteur($id) {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+            . 'visiteur.prenom AS prenom '
+            . 'FROM visiteur '
+            . 'WHERE visiteur.id = :unId '
         );
-        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
-    }
-    /**
-     * 
-     * @param type $ip
-     * @return type
-     */
-    public function getNbEchecs($ip){
-        $requete = $this->connexion->prepare(
-                'Select nbEchecs from journaleEchecs '
-                . 'where ip = :ip '
-        );
-        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
-        return $requete->fetch(PDO::FETCH_NUM)[0];
-    }
-    /**
-     * 
-     * @param type $ip
-     * @return type
-     */
-    public function getHorodatage($ip){
-        $requete = $this->connexion->prepare(
-                "select horodatage from journaleEchecs where ip=:ip"
-        );
-        $requete->bindParam(':ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
-        return $requete->fetch(PDO::FETCH_NUM)[0];
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);      
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
     }
     
-    public function setHorodatageNbSeconde($ip, int $seconde):void{
-        $date = new \DateTime();
-        $requete = $this->connexion->prepare(
-                "update journaleEchecs set horodatage = :date "
-                . "where ip = :ip"
+    public function getFicheForfaitDetailsVehicule($id, $date) {
+        $requetePrepare = $this->connexion->prepare(
+            'select fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, (lignefraisforfait.quantite * fraisforfait.montant) as total from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where lignefraisforfait.mois = :uneDate and lignefraisforfait.idvisiteur=:unId group by fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, total LIMIT 4 OFFSET 1;'
         );
-        $requete->bindParam('date', $date);
-        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);  
+        $requetePrepare->bindParam(':uneDate', $date, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
     }
-    
-    /**
-     * 
-     * @param type $ip
-     */
-    public function ajoutIpJournal($ip):void{
-        $requete = $this->connexion->prepare(
-                "insert into journaleEchecs (ip) values (:ip)"
+    public function getFicheForfaitDetailsNuitee($id, $date) {
+        $requetePrepare = $this->connexion->prepare(
+            'select fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, (lignefraisforfait.quantite * fraisforfait.montant) as total from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where lignefraisforfait.mois = :uneDate and lignefraisforfait.idvisiteur=:unId group by fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, total LIMIT 4 OFFSET 2;'
         );
-        $requete->bindParam(':ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);  
+        $requetePrepare->bindParam(':uneDate', $date, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
     }
-    
-    /**
-     * 
-     * @param type $ip
-     * @return bool
-     */
-    public function is_NotExistIp ($ip):bool{
-        $requete = $this->connexion->prepare(
-                "Select ip from journaleEchecs where ip=:ip"
+    public function getFicheForfaitDetails($id, $date) {
+        $requetePrepare = $this->connexion->prepare(
+            'select fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, (lignefraisforfait.quantite * fraisforfait.montant) as total from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where lignefraisforfait.mois = :uneDate and lignefraisforfait.idvisiteur=:unId group by fraisforfait.libelle, lignefraisforfait.quantite, fraisforfait.montant, total LIMIT 4 OFFSET 3;'
         );
-        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
-        $bool=false;
-        if(!$requete->fetch()){
-            $bool = true;
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);  
+        $requetePrepare->bindParam(':uneDate', $date, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+    public function getLesFraisHorsForfaitDetails($idVisiteur, $mois): array {
+        $requetePrepare = $this->connexion->prepare(
+                'SELECT date, libelle, montant FROM lignefraishorsforfait '
+                . 'WHERE lignefraishorsforfait.idvisiteur = :unIdVisiteur '
+                . 'AND lignefraishorsforfait.mois = :unMois'
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $lesLignes = $requetePrepare->fetchAll();
+        $nbLignes = count($lesLignes);
+        for ($i = 0; $i < $nbLignes; $i++) {
+            $date = $lesLignes[$i]['date'];
+            $lesLignes[$i]['date'] = Utilitaires::dateAnglaisVersFrancais($date);
         }
-        return $bool;
+        return $lesLignes;
     }
     
-    /**
-     * 
-     * @param type $ip
-     */
-    public function restartNbErreurs($ip):void{
-        $requete = $this->connexion->prepare(
-                "update journaleEchecs set nbEchecs = 0 where ip=:ip"
+    public function setCodeA2f($id, $code) {
+        $requetePrepare = $this->connexion->prepare(
+            'UPDATE visiteur '
+            . 'SET codea2f = :unCode '
+            . 'WHERE visiteur.id = :unIdVisiteur '
         );
-        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
+        $requetePrepare->bindParam(':unCode', $code, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unIdVisiteur', $id, PDO::PARAM_STR);
+        $requetePrepare->execute();
+    }
+
+    public function getCodeVisiteur($id) {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT visiteur.codea2f AS codea2f '
+            . 'FROM visiteur '
+            . 'WHERE visiteur.id = :unId'
+        );
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch()['codea2f'];
     }
     
-    public function setHorodatageNull($ip):void{
-        $requete = $this->connexion->prepare(
-                "update journaleEchecs set horodatage = null "
-                . "where ip = :ip"
+    public function setCodeA2fComptable($id, $code) {
+        $requetePrepare = $this->connexion->prepare(
+            'UPDATE comptable '
+            . 'SET codea2f = :unCode '
+            . 'WHERE comptable.id = :unIdComptable '
         );
-        $requete->bindParam('ip', $ip, PDO::PARAM_STR_CHAR);
-        $requete->execute();
+        $requetePrepare->bindParam(':unCode', $code, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unIdComptable', $id, PDO::PARAM_STR);
+        $requetePrepare->execute();
+    }
+    public function getCodeComptable($id) {
+        $requetePrepare = $this->connexion->prepare(
+            'SELECT comptable.codea2f AS codea2f '
+            . 'FROM comptable '
+            . 'WHERE comptable.id = :unIdComptable'
+        );
+        $requetePrepare->bindParam(':unIdComptable', $id, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch()['codea2f'];
     }
 }

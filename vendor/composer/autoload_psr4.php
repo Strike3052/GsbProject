@@ -10,5 +10,6 @@ return array(
     'Sources\\' => array($baseDir . '/tests'),
     'Outils\\' => array($baseDir . '/resources/Outils'),
     'Modeles\\' => array($baseDir . '/src/Modeles'),
+    'FPDF\\' => array($baseDir . '/resources/fpdf185'),
     'App\\' => array($baseDir . '/src'),
 );

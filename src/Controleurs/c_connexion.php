@@ -60,16 +60,28 @@ switch ($action) {
                 $nom = $comptable['nom'];
                 $prenom = $comptable['prenom'];
                 Utilitaires::connecter($id, $nom, $prenom, "comptable");
-                header('Location: index.php');
-                $pdo->restartNbErreurs($ip);
+                //header('Location: index.php');  
+                $estComptable = true;
+                $email = $comptable['email'];
+                $code = rand(1000, 9999);
+                $pdo->setCodeA2fComptable($id,$code);
+                mail($email, '[GSB-AppliFrais] Code de vérification', "Code : $code");
+                include PATH_VIEWS . 'v_code2facteurs.php';
+
             }
         } else {
             $id = $visiteur['id'];
             $nom = $visiteur['nom'];
             $prenom = $visiteur['prenom'];
             Utilitaires::connecter($id, $nom, $prenom, "visiteur");
-            header('Location: index.php');
-            $pdo->restartNbErreurs($ip);
+            //header('Location: index.php');
+            $estComptable = false;
+            $email = $visiteur['email'];
+            $code = rand(1000, 9999);
+            $pdo->setCodeA2f($id,$code);
+            mail($email, '[GSB-AppliFrais] Code de vérification', "Code : $code");
+            include PATH_VIEWS . 'v_code2facteurs.php';
+            
         }
         break;
     case 'valideA2fConnexion':
@@ -83,8 +95,17 @@ switch ($action) {
             header('Location: index.php');
         }
         break;
-    case 'blocage':
-        include_once PATH_VIEWS . 'v_blocage.php';
+    case 'valideA2fConnexionComptable':
+        $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_NUMBER_INT);
+        if ($pdo->getCodeComptable($_SESSION['idVisiteur']) !== $code) {
+            Utilitaires::ajouterErreur('Code de vérification incorrect');
+            include PATH_VIEWS . 'v_erreurs.php';
+            include PATH_VIEWS . 'v_code2facteurs.php';         
+            
+        } else {
+            Utilitaires::connecterA2f($code);
+            header('Location: index.php');
+        }
         break;
     default:
         include PATH_VIEWS . 'v_connexion.php';
